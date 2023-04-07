@@ -1,5 +1,7 @@
 package render;
 
+import map.Map;
+import map.MapBuilder;
 import window.AbstractRenderer;
 import lwjglutils.OGLTexture2D;
 import org.lwjgl.BufferUtils;
@@ -13,6 +15,7 @@ import java.nio.DoubleBuffer;
 import static lwjglutils.GluUtils.gluLookAt;
 import static lwjglutils.GluUtils.gluPerspective;
 import static lwjglutils.GlutUtils.glutSolidCube;
+import static lwjglutils.GlutUtils.glutSolidSphere;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -33,7 +36,9 @@ public class Renderer extends AbstractRenderer {
     private boolean per = false, depth = true;
     private boolean mouseButton1 = false;
 
-    private OGLTexture2D grass, stone;
+
+    private Map map = new Map();
+    private MapBuilder mapBuilder;
 
     public Renderer() {
         super();
@@ -120,14 +125,8 @@ public class Renderer extends AbstractRenderer {
         glLoadIdentity();
         glGetFloatv(GL_MODELVIEW_MATRIX, modelMatrix);
 
-        try {
-            grass = new OGLTexture2D("textures/grass.png");
-            stone = new OGLTexture2D("textures/stone.png");
 
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mapBuilder = new MapBuilder(map);
 
         glEnable(GL_TEXTURE_2D);
     }
@@ -152,40 +151,33 @@ public class Renderer extends AbstractRenderer {
         gluPerspective(45, width / (float) height, 0.1f, 100.0f);
 
         // divame se do sceny z kladne osy x, osa z je svisla
-        gluLookAt(50, 20, 15, 0, 0, 0, 0, 0, 1);
+
+        int p = 10;
+        gluLookAt(
+                p, p,50,
+                p, p, 0,
+                0, 1, 0
+        );
 
 
         glMatrixMode(GL_MODELVIEW);
 
         glLoadIdentity();
-        glPushMatrix();
+        mapBuilder.renderMap();
 
-        grass.bind();
-        glutSolidCube(5);
+       // glPushMatrix();
 
-        stone.bind();
+       // glutSolidCube(5);
 
-        glTranslatef(20, 0, 0);
-        glutSolidCube(4);
+       // glTranslatef(20, 0, 0);
+       // glutSolidCube(4);
 
-        glPopMatrix();
 
-        glBegin(GL_LINES);
-        glColor3f(1f, 0f, 0f);
-        glVertex3f(0f, 0f, 0f);
-        glVertex3f(100f, 0f, 0f);
-        glColor3f(0f, 1f, 0f);
-        glVertex3f(0f, 0f, 0f);
-        glVertex3f(0f, 100f, 0f);
-        glColor3f(0f, 0f, 1f);
-        glVertex3f(0f, 0f, 0f);
-        glVertex3f(0f, 0f, 100f);
-        glEnd();
+       // glTranslatef(0,10,10);
+       // glutSolidSphere(10,10,10);
 
-        float[] color = {1.0f, 1.0f, 1.0f};
-        glColor3fv(color);
+
         glDisable(GL_DEPTH_TEST);
-
     }
 
 }
