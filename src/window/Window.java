@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.Configuration;
 import org.lwjgl.system.MemoryStack;
+import render.AbstractRenderer;
 
 import java.nio.IntBuffer;
 

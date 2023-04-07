@@ -1,9 +1,8 @@
 package render;
 
+import lwjglutils.GLCamera;
 import map.Map;
 import map.MapBuilder;
-import window.AbstractRenderer;
-import lwjglutils.OGLTexture2D;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
@@ -14,8 +13,6 @@ import java.nio.DoubleBuffer;
 
 import static lwjglutils.GluUtils.gluLookAt;
 import static lwjglutils.GluUtils.gluPerspective;
-import static lwjglutils.GlutUtils.glutSolidCube;
-import static lwjglutils.GlutUtils.glutSolidSphere;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -36,9 +33,10 @@ public class Renderer extends AbstractRenderer {
     private boolean per = false, depth = true;
     private boolean mouseButton1 = false;
 
-
     private Map map = new Map();
     private MapBuilder mapBuilder;
+
+    private GLCamera camera;
 
     public Renderer() {
         super();
@@ -150,7 +148,6 @@ public class Renderer extends AbstractRenderer {
         glLoadIdentity();
         gluPerspective(45, width / (float) height, 0.1f, 100.0f);
 
-        // divame se do sceny z kladne osy x, osa z je svisla
 
         int p = 10;
         gluLookAt(
@@ -164,17 +161,6 @@ public class Renderer extends AbstractRenderer {
 
         glLoadIdentity();
         mapBuilder.renderMap();
-
-       // glPushMatrix();
-
-       // glutSolidCube(5);
-
-       // glTranslatef(20, 0, 0);
-       // glutSolidCube(4);
-
-
-       // glTranslatef(0,10,10);
-       // glutSolidSphere(10,10,10);
 
 
         glDisable(GL_DEPTH_TEST);
