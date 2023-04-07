@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="lwjgl-stable-2019-09-19-custom">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../lib/lwjgl-stable-2019-09-19-custom" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../lib/lwjgl-stable-2019-09-19-custom" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/../lib/lwjgl-stable-2019-09-19-custom" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/../lib/lwjgl-stable-2019-09-19-custom" recursive="false" type="SOURCES" />
+  </library>
+</component>
