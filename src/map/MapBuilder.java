@@ -31,7 +31,7 @@ public class MapBuilder {
             grass = new OGLTexture2D("textures/grass.png");
             stone = new OGLTexture2D("textures/stone.png");
             dirt = new OGLTexture2D("textures/dirt.png");
-            water = new OGLTexture2D("textures/water.png");
+            water = new OGLTexture2D("textures/water.gif");
             sand = new OGLTexture2D("textures/sand.jpg");
             //bob = new OGLTexture2D("textures/bob.png");
 
@@ -42,11 +42,6 @@ public class MapBuilder {
 
 
     public void renderMap() {
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
 
         for (int i = 0; i < map.getHeight(); i++) {
             for (int j = 0; j < map.getWidth(); j++) {
@@ -67,8 +62,6 @@ public class MapBuilder {
                 glPushMatrix();
                 glLoadIdentity();
 
-
-                //glScalef(0.8f, 0.8f, 0);
                 glTranslatef(i * mapSize, j * mapSize, 0);
 
 
@@ -96,18 +89,13 @@ public class MapBuilder {
 
 
                 glEnd();
-
-
-
-
-
-//                glLoadIdentity();
-//                glPushMatrix();
-//                glTranslatef(i * mapSize, j * mapSize, 0);
-//                glutSolidCube(10);
-//                glPopMatrix();
+                glPopMatrix();
             }
         }
 
+    }
+
+    public int getMapSize() {
+        return mapSize;
     }
 }

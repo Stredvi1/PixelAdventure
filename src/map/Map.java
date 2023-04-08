@@ -17,6 +17,9 @@ public class Map {
             {SAND, GRASS, GRASS, DIRT, DIRT, DIRT, GRASS},
             {GRASS, GRASS, DIRT,  DIRT, STONE, STONE, STONE},
             {GRASS, GRASS, DIRT, STONE, GRASS, GRASS, STONE},
+            {WATER, WATER, SAND, STONE, GRASS, GRASS, STONE},
+            {WATER, WATER, SAND, STONE, GRASS, GRASS, STONE},
+            {WATER, WATER, SAND, STONE, GRASS, GRASS, STONE},
             {WATER, WATER, SAND, STONE, GRASS, GRASS, STONE}
     };
 

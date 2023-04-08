@@ -26,12 +26,8 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class Renderer extends AbstractRenderer {
 
-    private double dx, dy;
-    private double ox, oy;
-
     private float[] modelMatrix = new float[16];
 
-    private boolean per = false, depth = true;
     private boolean mouseButton1 = false;
 
     private Map map = new Map();
@@ -39,6 +35,8 @@ public class Renderer extends AbstractRenderer {
     private Bob bob;
 
     private GLCamera camera;
+    private float trans = 0;
+    private float[] pos = new float[2];
 
     public Renderer() {
         super();
@@ -53,58 +51,34 @@ public class Renderer extends AbstractRenderer {
                 if (action == GLFW_RELEASE) {
                     //do nothing
                 }
-                if (action == GLFW_PRESS) {
-                    switch (key) {
-                        case GLFW_KEY_P:
-                            per = !per;
-                            break;
-                        case GLFW_KEY_D:
-                            depth = !depth;
-                            break;
-                        case GLFW_KEY_M:
-                            break;
-                    }
-                }
-            }
-        };
+                switch (key) {
+                    case GLFW_KEY_W:
+                        //camera.forward(trans);
+                        pos[0] -= trans;
+                        bob.setPosition(pos);
+                        break;
+                    case GLFW_KEY_S:
+                       // camera.backward(trans);
+                        pos[0] += trans;
+                        bob.setPosition(pos);
 
-        glfwMouseButtonCallback = new GLFWMouseButtonCallback() {
+                        break;
+                    case GLFW_KEY_A:
+                       // camera.right(trans);
+                        pos[1] -= trans;
+                        bob.setPosition(pos);
 
-            @Override
-            public void invoke(long window, int button, int action, int mods) {
-                DoubleBuffer xBuffer = BufferUtils.createDoubleBuffer(1);
-                DoubleBuffer yBuffer = BufferUtils.createDoubleBuffer(1);
-                glfwGetCursorPos(window, xBuffer, yBuffer);
-                double x = xBuffer.get(0);
-                double y = yBuffer.get(0);
+                        break;
+                    case GLFW_KEY_D:
+                       // camera.left(trans);
+                        pos[1] += trans;
+                        bob.setPosition(pos);
 
-                mouseButton1 = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS;
+                        break;
 
-                if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
-                    ox = x;
-                    oy = y;
                 }
             }
 
-        };
-
-        glfwCursorPosCallback = new GLFWCursorPosCallback() {
-            @Override
-            public void invoke(long window, double x, double y) {
-                if (mouseButton1) {
-                    dx = x - ox;
-                    dy = y - oy;
-                    ox = x;
-                    oy = y;
-                }
-            }
-        };
-
-        glfwScrollCallback = new GLFWScrollCallback() {
-            @Override
-            public void invoke(long window, double dx, double dy) {
-                //do nothing
-            }
         };
     }
 
@@ -112,8 +86,6 @@ public class Renderer extends AbstractRenderer {
     public void init() {
         super.init();
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-        glEnable(GL_DEPTH_TEST);
 
         glFrontFace(GL_CCW);
         glPolygonMode(GL_FRONT, GL_FILL);
@@ -126,51 +98,61 @@ public class Renderer extends AbstractRenderer {
         glGetFloatv(GL_MODELVIEW_MATRIX, modelMatrix);
 
 
+        camera = new GLCamera();
+
+
         mapBuilder = new MapBuilder(map);
-        bob = new Bob(map.getWidth() / 2f, map.getHeight() / 2f);
+        trans = mapBuilder.getMapSize() / 2f;
+        pos[0] = map.getWidth() / 2f;
+        pos[1] = map.getHeight() / 2f;
+        bob = new Bob(pos[0], pos[1]);
 
         glEnable(GL_TEXTURE_2D);
+
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     }
 
     @Override
     public void display() {
         glViewport(0, 0, width, height);
-        // zapnuti nebo vypnuti viditelnosti
-        if (depth)
-            glEnable(GL_DEPTH_TEST);
-        else
-            glDisable(GL_DEPTH_TEST);
 
-        // mazeme image buffer i z-buffer
-        glClearColor(0f, 0f, 0f, 1f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+        clearBuffers();
 
 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
+        glRotatef(-90, 0, 0, 1);
         gluPerspective(45, width / (float) height, 0.1f, 100.0f);
 
 
-        int p = 10;
         gluLookAt(
-                p, p, 50,
-                p, p, 0,
+                pos[0], pos[1] , 50,
+                pos[0], pos[1] , 0,
                 0, 1, 0
         );
+
 
 
         glMatrixMode(GL_MODELVIEW);
 
         glLoadIdentity();
 
-        bob.render();
+
         mapBuilder.renderMap();
+        bob.render();
 
 
+    }
 
-        glDisable(GL_DEPTH_TEST);
+
+    private void clearBuffers() {
+        glClearColor(0f, 0f, 0f, 1f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
     }
 
 }
