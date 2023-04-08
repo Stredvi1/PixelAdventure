@@ -1,5 +1,6 @@
 package render;
 
+import entity.Bob;
 import lwjglutils.GLCamera;
 import map.Map;
 import map.MapBuilder;
@@ -35,6 +36,7 @@ public class Renderer extends AbstractRenderer {
 
     private Map map = new Map();
     private MapBuilder mapBuilder;
+    private Bob bob;
 
     private GLCamera camera;
 
@@ -125,8 +127,11 @@ public class Renderer extends AbstractRenderer {
 
 
         mapBuilder = new MapBuilder(map);
+        bob = new Bob(map.getWidth() / 2f, map.getHeight() / 2f);
 
         glEnable(GL_TEXTURE_2D);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     @Override
@@ -143,7 +148,6 @@ public class Renderer extends AbstractRenderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
 
-
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         gluPerspective(45, width / (float) height, 0.1f, 100.0f);
@@ -151,7 +155,7 @@ public class Renderer extends AbstractRenderer {
 
         int p = 10;
         gluLookAt(
-                p, p,50,
+                p, p, 50,
                 p, p, 0,
                 0, 1, 0
         );
@@ -160,7 +164,10 @@ public class Renderer extends AbstractRenderer {
         glMatrixMode(GL_MODELVIEW);
 
         glLoadIdentity();
+
+        bob.render();
         mapBuilder.renderMap();
+
 
 
         glDisable(GL_DEPTH_TEST);

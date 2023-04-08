@@ -2,6 +2,7 @@ package map;
 
 
 import lwjglutils.OGLTexture2D;
+import org.lwjgl.opengl.GL11;
 
 import static lwjglutils.GlutUtils.glutSolidCube;
 import static org.lwjgl.glfw.GLFW.*;
@@ -40,15 +41,15 @@ public class MapBuilder {
     }
 
 
-
     public void renderMap() {
 
-        glMatrixMode(GL_MODELVIEW);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 
-
-        for(int i = 0; i < map.getHeight(); i++) {
-            for(int j = 0; j < map.getWidth(); j++) {
+        for (int i = 0; i < map.getHeight(); i++) {
+            for (int j = 0; j < map.getWidth(); j++) {
 
                 int parcel = map.getParcel(i, j);
 
@@ -58,14 +59,53 @@ public class MapBuilder {
                     case Map.DIRT -> dirt.bind();
                     case Map.STONE -> stone.bind();
                     case Map.SAND -> sand.bind();
-
-
                 }
-                glLoadIdentity();
+
+
+
+                glMatrixMode(GL_MODELVIEW);
                 glPushMatrix();
-                glTranslatef(j*mapSize, i*mapSize, 0);
-                glutSolidCube(10);
-                glPopMatrix();
+                glLoadIdentity();
+
+
+                //glScalef(0.8f, 0.8f, 0);
+                glTranslatef(i * mapSize, j * mapSize, 0);
+
+
+                float startX, startY;
+                float endX, endY;
+
+                startX = 0 - (float) (mapSize / 2);
+                endX = mapSize;
+
+
+                GL11.glBegin(GL_QUADS);
+                glColor3f(1f, 1f, 1f);
+
+                glTexCoord2f(0, 0);
+                glVertex2f(0, 0);
+
+                glTexCoord2f(1, 0);
+                glVertex2f(endX, 0);
+
+                glTexCoord2f(1, 1);
+                glVertex2f(endX, endX);
+
+                glTexCoord2f(0, 1);
+                glVertex2f(0, endX);
+
+
+                glEnd();
+
+
+
+
+
+//                glLoadIdentity();
+//                glPushMatrix();
+//                glTranslatef(i * mapSize, j * mapSize, 0);
+//                glutSolidCube(10);
+//                glPopMatrix();
             }
         }
 
