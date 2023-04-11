@@ -1,6 +1,7 @@
 package entity;
 
 import lwjglutils.OGLTexture2D;
+import map.Position;
 
 
 import static lwjglutils.GlutUtils.glutSolidCube;
@@ -11,21 +12,18 @@ import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 
 public class Bob {
 
-    private float[] position = new float[2];
     private OGLTexture2D texture;
     private int size = 5;
+    private Position pos;
 
-    public Bob(float x, float y) {
-        this.position[0] = x * 5;
-        this.position[1] = y * 5;
+    public Bob(Position pos) {
+        this.pos = pos;
 
         init();
     }
 
-    public Bob(float x, float y, int MapSize) {
-        this.position[0] = x * 10;
-        this.position[1] = y * 10;
-        this.size = MapSize - 2;
+    public Bob(int x, int y, int mapSize) {
+        this.pos = new Position(x, y, mapSize);
 
         init();
     }
@@ -42,15 +40,15 @@ public class Bob {
 
     public void render() {
 
+
         texture.bind();
+
 
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
         glLoadIdentity();
 
-        glTranslatef(position[0], position[1], 1);
-        glRotatef(-90, 0, 0, 1);
-
+        glTranslatef(pos.toMap()[0], pos.toMap()[1], 1);
 
 
         glBegin(GL_QUADS);
@@ -71,7 +69,8 @@ public class Bob {
         glPopMatrix();
     }
 
-    public void setPosition(float[] pos) {
-        this.position = pos;
+    public void setPosition(Position pos) {
+        //System.out.println(pos[0] + "  " + pos[1]);
+        this.pos = pos;
     }
 }

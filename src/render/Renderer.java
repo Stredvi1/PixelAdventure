@@ -4,6 +4,8 @@ import entity.Bob;
 import lwjglutils.GLCamera;
 import map.Map;
 import map.MapBuilder;
+import map.MapChecker;
+import map.Position;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
@@ -35,8 +37,10 @@ public class Renderer extends AbstractRenderer {
     private Bob bob;
 
     private GLCamera camera;
-    private float trans = 0;
+    private int trans = 1;
     private float[] pos = new float[2];
+    private Position position;
+    private MapChecker checker;
 
     public Renderer() {
         super();
@@ -51,31 +55,55 @@ public class Renderer extends AbstractRenderer {
                 if (action == GLFW_RELEASE) {
                     //do nothing
                 }
-                switch (key) {
-                    case GLFW_KEY_W:
-                        //camera.forward(trans);
-                        pos[0] -= trans;
-                        bob.setPosition(pos);
-                        break;
-                    case GLFW_KEY_S:
-                       // camera.backward(trans);
-                        pos[0] += trans;
-                        bob.setPosition(pos);
+                if (action == GLFW_PRESS) {
 
-                        break;
-                    case GLFW_KEY_A:
-                       // camera.right(trans);
-                        pos[1] -= trans;
-                        bob.setPosition(pos);
+                    int pos0, pos1;
 
-                        break;
-                    case GLFW_KEY_D:
-                       // camera.left(trans);
-                        pos[1] += trans;
-                        bob.setPosition(pos);
+                    switch (key) {
+                        case GLFW_KEY_W:
 
-                        break;
+                            pos1 = position.toParcel()[1] + trans;
 
+                            System.out.println(position.toString());
+
+                            if(checker.checkPos(position.toParcel()[0], pos1)) {
+                               position.y(pos1);
+                               bob.setPosition(position);
+                            }
+
+                            break;
+                        case GLFW_KEY_S:
+
+                            pos1 = position.toParcel()[1] - trans;
+
+                            System.out.println(position.toString());
+
+                            if(checker.checkPos(position.toParcel()[0], pos1)) {
+                                position.y(pos1);
+                                bob.setPosition(position);
+                            }
+                            break;
+                        case GLFW_KEY_A:
+
+                            pos0 = position.toParcel()[0] - trans;
+                            System.out.println(position.toString());
+
+                            if(checker.checkPos(pos0, position.toParcel()[1])) {
+                                position.x(pos0);
+                                bob.setPosition(position);
+                            }
+                            break;
+                        case GLFW_KEY_D:
+                            pos0 = position.toParcel()[0] + trans;
+                            System.out.println(position.toString());
+
+
+                            if(checker.checkPos(pos0, position.toParcel()[1])) {
+                                position.x(pos0);
+                                bob.setPosition(position);
+                                break;
+                            }
+                    }
                 }
             }
 
@@ -102,10 +130,13 @@ public class Renderer extends AbstractRenderer {
 
 
         mapBuilder = new MapBuilder(map);
-        trans = mapBuilder.getMapSize() / 2f;
-        pos[0] = map.getWidth() / 2f;
-        pos[1] = map.getHeight() / 2f;
-        bob = new Bob(pos[0], pos[1]);
+        checker = new MapChecker(map);
+//        pos[0] = map.getWidth() / 2f;
+//        pos[1] = map.getHeight() / 2f;
+
+        position = mapBuilder.getCenter();
+
+        bob = new Bob(position);
 
         glEnable(GL_TEXTURE_2D);
 
@@ -126,16 +157,14 @@ public class Renderer extends AbstractRenderer {
 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glRotatef(-90, 0, 0, 1);
         gluPerspective(45, width / (float) height, 0.1f, 100.0f);
 
 
         gluLookAt(
-                pos[0], pos[1] , 50,
-                pos[0], pos[1] , 0,
+                position.toMap()[0], position.toMap()[1], 50,
+                position.toMap()[0], position.toMap()[1], 0,
                 0, 1, 0
         );
-
 
 
         glMatrixMode(GL_MODELVIEW);

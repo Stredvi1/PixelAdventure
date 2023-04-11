@@ -44,7 +44,10 @@ public class MapBuilder {
     public void renderMap() {
 
         for (int i = 0; i < map.getHeight(); i++) {
-            for (int j = 0; j < map.getWidth(); j++) {
+            //Loop for rows
+
+            for (int j = 0; j < map.getRowLength(i); j++) {
+                //Loop for parcels
 
                 int parcel = map.getParcel(i, j);
 
@@ -57,19 +60,15 @@ public class MapBuilder {
                 }
 
 
-
                 glMatrixMode(GL_MODELVIEW);
                 glPushMatrix();
                 glLoadIdentity();
 
-                glTranslatef(i * mapSize, j * mapSize, 0);
+//                glScalef(0.1f, 0.1f, 1);
+                glTranslatef((float) ((j) * mapSize), (float) (-(i) * mapSize), 0);
 
-
-                float startX, startY;
-                float endX, endY;
-
-                startX = 0 - (float) (mapSize / 2);
-                endX = mapSize;
+                float end;
+                end = mapSize;
 
 
                 GL11.glBegin(GL_QUADS);
@@ -79,23 +78,27 @@ public class MapBuilder {
                 glVertex2f(0, 0);
 
                 glTexCoord2f(1, 0);
-                glVertex2f(endX, 0);
+                glVertex2f(end, 0);
 
                 glTexCoord2f(1, 1);
-                glVertex2f(endX, endX);
+                glVertex2f(end, end);
 
                 glTexCoord2f(0, 1);
-                glVertex2f(0, endX);
-
+                glVertex2f(0, end);
 
                 glEnd();
                 glPopMatrix();
             }
         }
-
     }
 
     public int getMapSize() {
         return mapSize;
+    }
+
+    public Position getCenter() {
+        Position pos = new Position(map.getWidth() / 2, map.getHeight() / 2, mapSize);
+        System.out.println(pos.toParcel()[0] + "  " + pos.toParcel()[1]);
+        return pos;
     }
 }

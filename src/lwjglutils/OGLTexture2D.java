@@ -235,8 +235,9 @@ public class OGLTexture2D implements OGLTexture {
         System.out.print("Reading texture file " + fileName);
 		
         ByteBuffer imageBuffer  = ioResourceToByteBuffer(fileName, 1024);
-        
-        if (!stbi_info_from_memory(imageBuffer, width, height, components))
+		stbi_set_flip_vertically_on_load(true);
+
+		if (!stbi_info_from_memory(imageBuffer, width, height, components))
             throw new IOException("Failed to read image information: " + stbi_failure_reason());
 
         ByteBuffer data = stbi_load_from_memory(imageBuffer, width, height, components, 4);

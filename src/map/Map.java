@@ -4,23 +4,42 @@ import java.util.ArrayList;
 
 public class Map {
 
+    public static final int VOID = -1;
     public static final int WATER = 0;
-    public static final int GRASS = 1;
-    public static final int DIRT = 2;
-    public static final int STONE = 3;
-    public static final int SAND = 4;
+    public static final int SAND = 1;
+    public static final int GRASS = 2;
+    public static final int DIRT = 3;
+    public static final int STONE = 4;
+
+
+//    private int[][] design = {
+//            {0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
+//            {0, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3},
+//            {1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2},
+//            {2, 2, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4},
+//            {2, 2, 3, 4, 2, 2, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4},
+//            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 0, 0, 4, 4, 4, 4},
+//            {0, 0, 1, 4, 2, 2, 4, 4, 4, 0, 0, 0, 4, 4, 4, 4},
+//            {0, 0, 1, 4, 2, 2, 4, 4, 4, 0, 0, 4, 4, 4, 4, 4},
+//            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 0, 0, 4, 4, 4, 4},
+//            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 0, 0, 4, 4, 4, 4},
+//            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 4, 0, 0, 4, 4, 4},
+//            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 4, 0, 0, 0, 4, 4},
+//            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 0, 0, 0, 0, 4, 4},
+//            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 4, 4, 0, 0, 4, 4},
+//            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4},
+//            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4},
+//
+//    };
 
 
     private int[][] design = {
-            {WATER, WATER, WATER, SAND, SAND, SAND, GRASS},
-            {WATER, SAND, SAND, GRASS, GRASS, GRASS, DIRT},
-            {SAND, GRASS, GRASS, DIRT, DIRT, DIRT, GRASS},
-            {GRASS, GRASS, DIRT,  DIRT, STONE, STONE, STONE},
-            {GRASS, GRASS, DIRT, STONE, GRASS, GRASS, STONE},
-            {WATER, WATER, SAND, STONE, GRASS, GRASS, STONE},
-            {WATER, WATER, SAND, STONE, GRASS, GRASS, STONE},
-            {WATER, WATER, SAND, STONE, GRASS, GRASS, STONE},
-            {WATER, WATER, SAND, STONE, GRASS, GRASS, STONE}
+            {0, 0, 0, 0, 0, 0},
+            {0, 1, 1, 1, 1, 0},
+            {0, 2, 1, 1, 1},
+            {0, 1, 1, 1, 1},
+            {0, 0, 0, 0,}
+
     };
 
 
@@ -44,7 +63,10 @@ public class Map {
     }
 
     public int getParcel(int i, int j) {
-        return design[i][j];
+        if (i <= this.getHeight() && j <= this.getWidth()) {
+            return design[i][j];
+        }
+        return -1;
     }
 
     public int getHeight() {
@@ -54,5 +76,9 @@ public class Map {
     public int getWidth() {
         return design[0].length;
 
+    }
+
+    public int getRowLength(int row) {
+        return design[row].length;
     }
 }
