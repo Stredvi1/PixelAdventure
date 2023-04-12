@@ -4,16 +4,13 @@ package map;
 import lwjglutils.OGLTexture2D;
 import org.lwjgl.opengl.GL11;
 
-import static lwjglutils.GlutUtils.glutSolidCube;
-import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjglx.debug.GLmetadata.glBegin;
 
 public class MapBuilder {
 
     private OGLTexture2D water, grass, dirt, stone, sand;
     private Map map;
-    private int mapSize = 5;
+    public static int MAP_SIZE = 5;
 
     public MapBuilder(Map map) {
         this.map = map;
@@ -22,7 +19,7 @@ public class MapBuilder {
 
     public MapBuilder(Map map, int mapSize) {
         this.map = map;
-        this.mapSize = mapSize;
+        this.MAP_SIZE = mapSize;
         init();
     }
 
@@ -31,8 +28,8 @@ public class MapBuilder {
             grass = new OGLTexture2D("textures/grass.png");
             stone = new OGLTexture2D("textures/stone.png");
             dirt = new OGLTexture2D("textures/dirt.png");
-            water = new OGLTexture2D("textures/water.gif");
-            sand = new OGLTexture2D("textures/sand.jpg");
+            water = new OGLTexture2D("textures/water.png");
+            sand = new OGLTexture2D("textures/sand.png");
             //bob = new OGLTexture2D("textures/bob.png");
 
         } catch (Exception e) {
@@ -57,6 +54,10 @@ public class MapBuilder {
                     case Map.DIRT -> dirt.bind();
                     case Map.STONE -> stone.bind();
                     case Map.SAND -> sand.bind();
+                    case Map.VOID -> {
+                        continue;
+                    }
+
                 }
 
 
@@ -65,10 +66,10 @@ public class MapBuilder {
                 glLoadIdentity();
 
 //                glScalef(0.1f, 0.1f, 1);
-                glTranslatef((float) ((j) * mapSize), (float) (-(i) * mapSize), 0);
+                glTranslatef((float) ((j) * MAP_SIZE), (float) (-(i) * MAP_SIZE), 0);
 
                 float end;
-                end = mapSize;
+                end = MAP_SIZE;
 
 
                 GL11.glBegin(GL_QUADS);
@@ -93,11 +94,11 @@ public class MapBuilder {
     }
 
     public int getMapSize() {
-        return mapSize;
+        return MAP_SIZE;
     }
 
     public Position getCenter() {
-        Position pos = new Position(map.getWidth() / 2, map.getHeight() / 2, mapSize);
+        Position pos = new Position(map.getWidth() / 2, map.getHeight() / 2, MAP_SIZE);
         System.out.println(pos.toParcel()[0] + "  " + pos.toParcel()[1]);
         return pos;
     }

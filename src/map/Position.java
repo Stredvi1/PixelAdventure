@@ -55,4 +55,14 @@ public class Position {
                 "parcelPos=" + Arrays.toString(parcelPos) +
                 '}';
     }
+
+    public boolean equals(Position pos) {
+        if(
+                parcelPos[0] == pos.toParcel()[0] &&
+                parcelPos[1] == pos.toParcel()[1]
+        ) {
+            return true;
+        }
+        return false;
+    }
 }

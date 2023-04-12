@@ -2,23 +2,23 @@ package map;
 
 public class MapChecker {
 
-    private float[] pos = new float[2];
     private Map map;
-
 
     public MapChecker(Map map) {
         this.map = map;
     }
 
     public boolean checkPos(int x, int y) {
-        if (x > map.getHeight() || y > map.getRowLength(x)) {
+        if (y < 0 || y >= map.getHeight() ||
+            x >= map.getRowLength(y) || x < 0)
+         {
             return false;
         }
 
 
-
-
+        //TODO WHY U STOOPID BASTARD? WHY!
         int parcel = map.getParcel(y, x);
+
         if(parcel != Map.WATER &&
         parcel != Map.VOID) {
             return true;

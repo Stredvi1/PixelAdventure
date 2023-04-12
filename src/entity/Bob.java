@@ -13,7 +13,8 @@ import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 public class Bob {
 
     private OGLTexture2D texture;
-    private int size = 5;
+    private float size = 5;
+    private float scale = 0.6f;
     private Position pos;
 
     public Bob(Position pos) {
@@ -22,8 +23,9 @@ public class Bob {
         init();
     }
 
-    public Bob(int x, int y, int mapSize) {
-        this.pos = new Position(x, y, mapSize);
+    public Bob(Position pos, int mapSize) {
+        this.pos = pos;
+        this.size = mapSize * scale;
 
         init();
     }
@@ -40,15 +42,13 @@ public class Bob {
 
     public void render() {
 
-
         texture.bind();
-
 
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
         glLoadIdentity();
 
-        glTranslatef(pos.toMap()[0], pos.toMap()[1], 1);
+        glTranslatef(pos.toMap()[0] + 1, pos.toMap()[1] + 1, 1);
 
 
         glBegin(GL_QUADS);
@@ -70,7 +70,6 @@ public class Bob {
     }
 
     public void setPosition(Position pos) {
-        //System.out.println(pos[0] + "  " + pos[1]);
         this.pos = pos;
     }
 }

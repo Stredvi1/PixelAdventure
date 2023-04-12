@@ -1,6 +1,7 @@
 package render;
 
 import entity.Bob;
+import entity.Item;
 import lwjglutils.GLCamera;
 import map.Map;
 import map.MapBuilder;
@@ -42,6 +43,9 @@ public class Renderer extends AbstractRenderer {
     private Position position;
     private MapChecker checker;
 
+
+    private Item baget;
+
     public Renderer() {
         super();
 
@@ -62,21 +66,20 @@ public class Renderer extends AbstractRenderer {
                     switch (key) {
                         case GLFW_KEY_W:
 
-                            pos1 = position.toParcel()[1] + trans;
+                            pos1 = position.toParcel()[1] - trans;
 
-                            System.out.println(position.toString());
 
                             if(checker.checkPos(position.toParcel()[0], pos1)) {
                                position.y(pos1);
+                               baget.pickUp(position);
                                bob.setPosition(position);
                             }
 
                             break;
                         case GLFW_KEY_S:
 
-                            pos1 = position.toParcel()[1] - trans;
+                            pos1 = position.toParcel()[1] + trans;
 
-                            System.out.println(position.toString());
 
                             if(checker.checkPos(position.toParcel()[0], pos1)) {
                                 position.y(pos1);
@@ -86,7 +89,6 @@ public class Renderer extends AbstractRenderer {
                         case GLFW_KEY_A:
 
                             pos0 = position.toParcel()[0] - trans;
-                            System.out.println(position.toString());
 
                             if(checker.checkPos(pos0, position.toParcel()[1])) {
                                 position.x(pos0);
@@ -95,7 +97,6 @@ public class Renderer extends AbstractRenderer {
                             break;
                         case GLFW_KEY_D:
                             pos0 = position.toParcel()[0] + trans;
-                            System.out.println(position.toString());
 
 
                             if(checker.checkPos(pos0, position.toParcel()[1])) {
@@ -136,7 +137,8 @@ public class Renderer extends AbstractRenderer {
 
         position = mapBuilder.getCenter();
 
-        bob = new Bob(position);
+        bob = new Bob(position, mapBuilder.getMapSize());
+        baget = new Item("textures/bb.png", 3);
 
         glEnable(GL_TEXTURE_2D);
 
@@ -173,8 +175,8 @@ public class Renderer extends AbstractRenderer {
 
 
         mapBuilder.renderMap();
+        baget.render();
         bob.render();
-
 
     }
 
