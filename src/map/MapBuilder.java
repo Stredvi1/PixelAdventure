@@ -93,13 +93,8 @@ public class MapBuilder {
         }
     }
 
-    public int getMapSize() {
-        return MAP_SIZE;
-    }
-
     public Position getCenter() {
         Position pos = new Position(map.getWidth() / 2, map.getHeight() / 2, MAP_SIZE);
-        System.out.println(pos.toParcel()[0] + "  " + pos.toParcel()[1]);
         return pos;
     }
 }

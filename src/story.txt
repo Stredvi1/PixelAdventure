@@ -1,0 +1,9 @@
+
+So, the story begins
+
+Borec půjde do bageterky si objednat ale majitel řekne, že nepřišla dodávka, protože ji přepadli a sebrali tajný recept
+a potřebuje od nás pomoc zíksat recept zpět, odměnou za doživotní zásobu baget
+zlý [entita] ukradl z dodávky baget i tajný recept, který teď střeží (boss figth)
+cestou se po mapě rozsypaly bagty, které teď žebráci a bezdomovci chtějí sebrat
+
+cíl: posbírat co nejvíce baget a získat zpět tajný recept

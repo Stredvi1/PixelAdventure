@@ -7,13 +7,9 @@ import map.Map;
 import map.MapBuilder;
 import map.MapChecker;
 import map.Position;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
-import org.lwjgl.glfw.GLFWScrollCallback;
 
-import java.nio.DoubleBuffer;
 
 import static lwjglutils.GluUtils.gluLookAt;
 import static lwjglutils.GluUtils.gluPerspective;
@@ -71,7 +67,6 @@ public class Renderer extends AbstractRenderer {
 
                             if(checker.checkPos(position.toParcel()[0], pos1)) {
                                position.y(pos1);
-                               baget.pickUp(position);
                                bob.setPosition(position);
                             }
 
@@ -105,6 +100,8 @@ public class Renderer extends AbstractRenderer {
                                 break;
                             }
                     }
+                    baget.pickUp(position);
+
                 }
             }
 
@@ -132,13 +129,11 @@ public class Renderer extends AbstractRenderer {
 
         mapBuilder = new MapBuilder(map);
         checker = new MapChecker(map);
-//        pos[0] = map.getWidth() / 2f;
-//        pos[1] = map.getHeight() / 2f;
 
         position = mapBuilder.getCenter();
 
-        bob = new Bob(position, mapBuilder.getMapSize());
-        baget = new Item("textures/bb.png", 3);
+        bob = new Bob(position);
+        baget = new Item("bb.png", 3);
 
         glEnable(GL_TEXTURE_2D);
 
