@@ -1,5 +1,8 @@
 package entity;
 
+import lwjglutils.OGLTexImage;
+import lwjglutils.OGLTexImageByte;
+import lwjglutils.OGLTexture;
 import lwjglutils.OGLTexture2D;
 import map.MapBuilder;
 import map.Position;

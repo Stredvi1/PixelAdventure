@@ -10,6 +10,11 @@ public class Map {
     public static final int GRASS = 2;
     public static final int DIRT = 3;
     public static final int STONE = 4;
+    public static final int ASPHALT = 5;
+    public static final int TILE = 6;
+
+
+
 
 
     private int[][] design = {

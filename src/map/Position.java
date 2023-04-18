@@ -4,7 +4,9 @@ import java.util.Arrays;
 
 public class Position {
 
-    private int[] parcelPos = new int[2];
+    public int[] parcelPos = new int[2];
+
+    private int id = 0;
 
 
     public Position(int[] parcelPos) {
@@ -16,6 +18,11 @@ public class Position {
 
         this.parcelPos[0] = parcelX;
         this.parcelPos[1] = parcelY;
+    }
+
+    public Position(Position pos, int mapID) {
+        this.id = mapID;
+        this.parcelPos = pos.toParcel();
     }
 
     public float[] toMap() {
@@ -36,6 +43,18 @@ public class Position {
 
     public void y(int y) {
         parcelPos[1] = y;
+    }
+
+    public int getX() {
+        return parcelPos[0];
+    }
+
+    public int getY() {
+        return parcelPos[1];
+    }
+
+    public int getID() {
+        return id;
     }
 
     public boolean equals(Position pos) {

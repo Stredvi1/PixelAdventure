@@ -8,12 +8,11 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class MapBuilder {
 
-    private OGLTexture2D water, grass, dirt, stone, sand;
+    private OGLTexture2D water, grass, dirt, stone, sand, asphalt, tile;
     private Map map;
     public static int MAP_SIZE = 5;
 
-    public MapBuilder(Map map) {
-        this.map = map;
+    public MapBuilder() {
         init();
     }
 
@@ -30,21 +29,20 @@ public class MapBuilder {
             dirt = new OGLTexture2D("textures/dirt.png");
             water = new OGLTexture2D("textures/water.png");
             sand = new OGLTexture2D("textures/sand.png");
-
+            asphalt = new OGLTexture2D("textures/asphalt.png");
+            tile = new OGLTexture2D("textures/tile.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
-    public void renderMap() {
+    public void renderMap(Map map) {
 
         for (int i = 0; i < map.getHeight(); i++) {
             //Loop for rows
-
             for (int j = 0; j < map.getRowLength(i); j++) {
                 //Loop for parcels
-
                 int parcel = map.getParcel(i, j);
 
                 switch (parcel) {
@@ -53,6 +51,9 @@ public class MapBuilder {
                     case Map.DIRT -> dirt.bind();
                     case Map.STONE -> stone.bind();
                     case Map.SAND -> sand.bind();
+                    case Map.ASPHALT -> asphalt.bind();
+                    case Map.TILE -> tile.bind();
+
                     case Map.VOID -> {
                         continue;
                     }
@@ -87,10 +88,5 @@ public class MapBuilder {
                 glPopMatrix();
             }
         }
-    }
-
-    public Position getCenter() {
-        Position pos = new Position(map.getWidth() / 2, map.getHeight() / 2);
-        return pos;
     }
 }

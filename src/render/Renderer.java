@@ -1,5 +1,6 @@
 package render;
 
+import controller.BagetCounter;
 import entity.Bob;
 import entity.Entity;
 import entity.Item;
@@ -7,7 +8,15 @@ import entity.NPC;
 import lwjglutils.GLCamera;
 import map.*;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import scenes.BBShopScene;
+import scenes.Scene;
+import scenes.StartingScene;
 
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 import static lwjglutils.GluUtils.gluLookAt;
 import static lwjglutils.GluUtils.gluPerspective;
@@ -41,6 +50,11 @@ public class Renderer extends AbstractRenderer {
 
     private NPC cook;
 
+    private Scene ACTIVE, starting, bbShop;
+    private ArrayList<Scene> scenes;
+
+    private BagetCounter bc;
+
     public Renderer() {
         super();
 
@@ -56,57 +70,34 @@ public class Renderer extends AbstractRenderer {
                 }
                 if (action == GLFW_PRESS) {
 
-                    int pos0, pos1;
+                    int teleportID;
 
                     switch (key) {
                         case GLFW_KEY_W:
-
-                            pos1 = position.toParcel()[1] - trans;
-
-
-                            if(checker.checkMove(position.toParcel()[0], pos1)) {
-                               position.y(pos1);
-                               bob.setPosition(position);
-                            }
-
+                            ACTIVE.up();
                             break;
                         case GLFW_KEY_S:
-
-                            pos1 = position.toParcel()[1] + trans;
-
-
-                            if(checker.checkMove(position.toParcel()[0], pos1)) {
-                                position.y(pos1);
-                                bob.setPosition(position);
-                            }
+                            ACTIVE.down();
                             break;
                         case GLFW_KEY_A:
-
-                            pos0 = position.toParcel()[0] - trans;
-
-                            if(checker.checkMove(pos0, position.toParcel()[1])) {
-                                position.x(pos0);
-                                bob.setPosition(position);
-                            }
+                            ACTIVE.left();
                             break;
                         case GLFW_KEY_D:
-                            pos0 = position.toParcel()[0] + trans;
-
-
-                            if(checker.checkMove(pos0, position.toParcel()[1])) {
-                                position.x(pos0);
-                                bob.setPosition(position);
-                                break;
-                            }
+                            ACTIVE.right();
+                            break;
                     }
-                    baget.pickUp(position);
-                    voidTex.setPosition(position);
+                    teleportID = ACTIVE.checkCurrentPos();
+                    if (teleportID != 0 && teleportID != ACTIVE.getSceneID()) {
+                        System.out.println("HUH? UPDATE");
+                        updateActiveScene(teleportID);
 
+                    }
                 }
             }
-
         };
     }
+
+
 
     @Override
     public void init() {
@@ -123,19 +114,17 @@ public class Renderer extends AbstractRenderer {
         glLoadIdentity();
         glGetFloatv(GL_MODELVIEW_MATRIX, modelMatrix);
 
+        mapBuilder = new MapBuilder();
 
-        mapBuilder = new MapBuilder(map);
+        starting = new StartingScene(mapBuilder);
+        bbShop = new BBShopScene(mapBuilder);
 
-        checker = new MapChecker(map);
+        scenes = new ArrayList<>();
+        scenes.addAll(Arrays.asList(starting, bbShop));
 
-        position = mapBuilder.getCenter();
-        voidTex = new VoidTex(position);
+        ACTIVE = starting;
 
-        bob = new Bob(position);
-        cook = new NPC(new Position(10, 10), "bb_maestro.png");
-        cook.addMessage("Hellooooooooooooooooooooooo");
-        baget = new Item("bb.png", 3);
-
+        bc = new BagetCounter(textRenderer);
 
         glEnable(GL_TEXTURE_2D);
 
@@ -159,30 +148,31 @@ public class Renderer extends AbstractRenderer {
         gluPerspective(45, width / (float) height, 0.1f, 100.0f);
 
 
-        gluLookAt(
-                position.toMap()[0], position.toMap()[1], 50,
-                position.toMap()[0], position.toMap()[1], 0,
-                0, 1, 0
-        );
+        gluLookAt(ACTIVE.getPlayerPos().toMap()[0], ACTIVE.getPlayerPos().toMap()[1], 50, ACTIVE.getPlayerPos().toMap()[0], ACTIVE.getPlayerPos().toMap()[1], 0, 0, 1, 0);
 
 
         glMatrixMode(GL_MODELVIEW);
 
         glLoadIdentity();
 
-        voidTex.render();
-        mapBuilder.renderMap();
-        baget.render();
-        bob.render();
-        cook.render();
-        cook.showMessage();
+        ACTIVE.render();
+        bc.showCount();
+
 
     }
-
 
     private void clearBuffers() {
         glClearColor(0f, 0f, 0f, 1f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+    }
+
+    private void updateActiveScene(int teleportID) {
+
+        for(Scene scene : scenes) {
+            if(scene.getSceneID() == teleportID) {
+                ACTIVE = scene;
+            }
+        }
     }
 
 }

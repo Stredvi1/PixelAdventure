@@ -11,17 +11,21 @@ public class VoidTex {
     private int width, height;
 
 
-    public VoidTex(Position pos) {
+    public VoidTex(Position pos, boolean isSky) {
         this.pos = pos;
 
-        width = 20 * MapBuilder.MAP_SIZE;
-        height = 20 * MapBuilder.MAP_SIZE;
-        init();
+        width = 40 * MapBuilder.MAP_SIZE;
+        height = 40 * MapBuilder.MAP_SIZE;
+        init(isSky);
     }
 
-    private void init() {
+    private void init(boolean isSky) {
         try {
-            texture = new OGLTexture2D("textures/void.png");
+            if(isSky) {
+                texture = new OGLTexture2D("textures/sky.png");
+            } else {
+                texture = new OGLTexture2D("textures/void.png");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -37,14 +41,15 @@ public class VoidTex {
         glMatrixMode(GL_TEXTURE);
         glPushMatrix();
         glLoadIdentity();
-        glScalef(8f, 8f, -1);
+        glScalef(8f, 8f, 8f);
 
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
         glLoadIdentity();
 
 
-        glTranslatef(pos.toMap()[0], pos.toMap()[1], -1);
+//        glTranslatef(pos.toMap()[0], pos.toMap()[1], -20);
+        glTranslatef(40 + pos.toMap()[0] / 10, 20 - pos.toMap()[1] / 10, -10);
 
 
         glBegin(GL_QUADS);

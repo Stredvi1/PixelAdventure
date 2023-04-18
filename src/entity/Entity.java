@@ -31,7 +31,7 @@ public abstract class Entity {
         glPushMatrix();
         glLoadIdentity();
 
-        glTranslatef(pos.toMap()[0] + 1, pos.toMap()[1] + 1, 1);
+        glTranslatef(pos.toMap()[0] + 0.9f, pos.toMap()[1] + 0.9f, 1);
 
 
         glBegin(GL_QUADS);
