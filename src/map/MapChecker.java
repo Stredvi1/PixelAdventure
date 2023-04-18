@@ -8,7 +8,7 @@ public class MapChecker {
         this.map = map;
     }
 
-    public boolean checkPos(int x, int y) {
+    public boolean checkMove(int x, int y) {
         if (y < 0 || y >= map.getHeight() ||
             x >= map.getRowLength(y) || x < 0)
          {

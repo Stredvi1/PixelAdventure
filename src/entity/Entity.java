@@ -50,6 +50,7 @@ public abstract class Entity {
 
         glEnd();
         glPopMatrix();
+
     }
 
     public void setPosition(Position pos) {

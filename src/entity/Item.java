@@ -1,6 +1,5 @@
 package entity;
 
-import lwjglutils.OGLTexture2D;
 import map.MapBuilder;
 import map.Position;
 
@@ -10,7 +9,7 @@ public class Item extends Entity{
 
     public Item(String fileName, float size) {
         this.size = size;
-        pos = new Position(4, 4, MapBuilder.MAP_SIZE);
+        pos = new Position(9, 10);
 
         super.init(fileName);
     }

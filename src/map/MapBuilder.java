@@ -30,7 +30,6 @@ public class MapBuilder {
             dirt = new OGLTexture2D("textures/dirt.png");
             water = new OGLTexture2D("textures/water.png");
             sand = new OGLTexture2D("textures/sand.png");
-            //bob = new OGLTexture2D("textures/bob.png");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,15 +56,12 @@ public class MapBuilder {
                     case Map.VOID -> {
                         continue;
                     }
-
                 }
-
 
                 glMatrixMode(GL_MODELVIEW);
                 glPushMatrix();
                 glLoadIdentity();
 
-//                glScalef(0.1f, 0.1f, 1);
                 glTranslatef((float) ((j) * MAP_SIZE), (float) (-(i) * MAP_SIZE), 0);
 
                 float end;
@@ -94,7 +90,7 @@ public class MapBuilder {
     }
 
     public Position getCenter() {
-        Position pos = new Position(map.getWidth() / 2, map.getHeight() / 2, MAP_SIZE);
+        Position pos = new Position(map.getWidth() / 2, map.getHeight() / 2);
         return pos;
     }
 }

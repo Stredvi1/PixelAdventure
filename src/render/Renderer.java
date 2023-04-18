@@ -1,14 +1,12 @@
 package render;
 
 import entity.Bob;
+import entity.Entity;
 import entity.Item;
+import entity.NPC;
 import lwjglutils.GLCamera;
-import map.Map;
-import map.MapBuilder;
-import map.MapChecker;
-import map.Position;
+import map.*;
 import org.lwjgl.glfw.GLFWKeyCallback;
-import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
 
 import static lwjglutils.GluUtils.gluLookAt;
@@ -33,14 +31,15 @@ public class Renderer extends AbstractRenderer {
     private MapBuilder mapBuilder;
     private Bob bob;
 
-    private GLCamera camera;
     private int trans = 1;
     private float[] pos = new float[2];
     private Position position;
     private MapChecker checker;
 
-
+    private VoidTex voidTex;
     private Item baget;
+
+    private NPC cook;
 
     public Renderer() {
         super();
@@ -65,7 +64,7 @@ public class Renderer extends AbstractRenderer {
                             pos1 = position.toParcel()[1] - trans;
 
 
-                            if(checker.checkPos(position.toParcel()[0], pos1)) {
+                            if(checker.checkMove(position.toParcel()[0], pos1)) {
                                position.y(pos1);
                                bob.setPosition(position);
                             }
@@ -76,7 +75,7 @@ public class Renderer extends AbstractRenderer {
                             pos1 = position.toParcel()[1] + trans;
 
 
-                            if(checker.checkPos(position.toParcel()[0], pos1)) {
+                            if(checker.checkMove(position.toParcel()[0], pos1)) {
                                 position.y(pos1);
                                 bob.setPosition(position);
                             }
@@ -85,7 +84,7 @@ public class Renderer extends AbstractRenderer {
 
                             pos0 = position.toParcel()[0] - trans;
 
-                            if(checker.checkPos(pos0, position.toParcel()[1])) {
+                            if(checker.checkMove(pos0, position.toParcel()[1])) {
                                 position.x(pos0);
                                 bob.setPosition(position);
                             }
@@ -94,13 +93,14 @@ public class Renderer extends AbstractRenderer {
                             pos0 = position.toParcel()[0] + trans;
 
 
-                            if(checker.checkPos(pos0, position.toParcel()[1])) {
+                            if(checker.checkMove(pos0, position.toParcel()[1])) {
                                 position.x(pos0);
                                 bob.setPosition(position);
                                 break;
                             }
                     }
                     baget.pickUp(position);
+                    voidTex.setPosition(position);
 
                 }
             }
@@ -124,16 +124,18 @@ public class Renderer extends AbstractRenderer {
         glGetFloatv(GL_MODELVIEW_MATRIX, modelMatrix);
 
 
-        camera = new GLCamera();
-
-
         mapBuilder = new MapBuilder(map);
+
         checker = new MapChecker(map);
 
         position = mapBuilder.getCenter();
+        voidTex = new VoidTex(position);
 
         bob = new Bob(position);
+        cook = new NPC(new Position(10, 10), "bb_maestro.png");
+        cook.addMessage("Hellooooooooooooooooooooooo");
         baget = new Item("bb.png", 3);
+
 
         glEnable(GL_TEXTURE_2D);
 
@@ -168,10 +170,12 @@ public class Renderer extends AbstractRenderer {
 
         glLoadIdentity();
 
-
+        voidTex.render();
         mapBuilder.renderMap();
         baget.render();
         bob.render();
+        cook.render();
+        cook.showMessage();
 
     }
 
