@@ -71,4 +71,9 @@ public class Position {
                 "parcelPos=" + Arrays.toString(parcelPos) +
                 '}';
     }
+
+    public boolean withinRadius(Position main, int radius) {
+        return getX() >= main.getX() - radius && getX() <= main.getX() + radius &&
+                getY() >= main.getY() - radius && getY() <= main.getY() + radius;
+    }
 }

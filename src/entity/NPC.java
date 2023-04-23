@@ -5,27 +5,20 @@ import java.util.ArrayList;
 
 public class NPC extends Entity{
 
-    private ArrayList<Message> messages;
+    private String name;
 
-    public NPC(Position pos, String textureName) {
+    public NPC(Position pos, String name, String textureName) {
         this.pos = pos;
-
+        this.name = name;
         init(textureName);
     }
 
     protected void init(String textureName) {
         super.init(textureName);
-        messages = new ArrayList<>();
 
     }
 
-    public void showMessage() {
-        for(Message m : messages) {
-            m.show();
-        }
-    }
 
-    public void addMessage(String text) {
-        messages.add(new Message(text));
-    }
+
+
 }

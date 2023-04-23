@@ -5,9 +5,9 @@ import map.Position;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class BBShop extends Entity{
+public class Building extends Entity{
 
-    public BBShop(Position leftCornerPos, String textureName, int parcelWidth) {
+    public Building(Position leftCornerPos, String textureName, int parcelWidth) {
         this.pos = leftCornerPos;
         init("Buildings/" + textureName);
         this.size = parcelWidth * MapBuilder.MAP_SIZE + 1;

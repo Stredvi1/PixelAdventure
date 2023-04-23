@@ -8,9 +8,11 @@ import entity.NPC;
 import lwjglutils.GLCamera;
 import map.*;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import scenes.BBShopScene;
 import scenes.Scene;
 import scenes.StartingScene;
+import window.Window;
 
 
 import java.util.ArrayList;
@@ -55,6 +57,9 @@ public class Renderer extends AbstractRenderer {
 
     private BagetCounter bc;
 
+    public static int WIDTH = Window.WIDTH;
+    public static int HEIGHT = Window.HEIGHT;
+
     public Renderer() {
         super();
 
@@ -85,6 +90,8 @@ public class Renderer extends AbstractRenderer {
                         case GLFW_KEY_D:
                             ACTIVE.right();
                             break;
+                        case GLFW_KEY_ENTER:
+                            ACTIVE.nextMessage();
                     }
                     teleportID = ACTIVE.checkCurrentPos();
                     if (teleportID != 0 && teleportID != ACTIVE.getSceneID()) {
@@ -116,8 +123,8 @@ public class Renderer extends AbstractRenderer {
 
         mapBuilder = new MapBuilder();
 
-        starting = new StartingScene(mapBuilder);
-        bbShop = new BBShopScene(mapBuilder);
+        starting = new StartingScene(mapBuilder, textRenderer);
+        bbShop = new BBShopScene(mapBuilder, textRenderer);
 
         scenes = new ArrayList<>();
         scenes.addAll(Arrays.asList(starting, bbShop));
@@ -173,6 +180,35 @@ public class Renderer extends AbstractRenderer {
                 ACTIVE = scene;
             }
         }
+    }
+
+    protected GLFWWindowSizeCallback glfwWindowSizeCallback = new GLFWWindowSizeCallback() {
+        @Override
+        public void invoke(long window, int w, int h) {
+            if (w > 0 && h > 0) {
+                width = WIDTH = w;
+                height = HEIGHT = h;
+                System.out.println("Windows resize to [" + w + ", " + h + "]");
+                if (textRenderer != null) {
+                    textRenderer.resize(width, height);
+
+                    if(width >= 3000) {
+                        System.out.println("scale 6");
+                        textRenderer.setScale(6);
+                    } else if (width >= 1000) {
+                        System.out.println("scale 3");
+                        textRenderer.setScale(3);
+                    } else {
+                        System.out.println("scale 2");
+                        textRenderer.setScale(2);
+                    }
+                }
+            }
+        }
+    };
+
+    public GLFWWindowSizeCallback getGlfwWindowSizeCallback() {
+        return glfwWindowSizeCallback;
     }
 
 }

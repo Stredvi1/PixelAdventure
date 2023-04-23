@@ -2,7 +2,10 @@ package controller;
 
 import lwjglutils.OGLTextRenderer;
 
-import java.awt.*;
+import window.Window;
+import java.awt.Color;
+
+
 
 public class BagetCounter {
 
@@ -13,15 +16,13 @@ public class BagetCounter {
     public BagetCounter(OGLTextRenderer textRenderer) {
         this.textRenderer = textRenderer;
 
-        textRenderer.setBackgroundColor(Color.BLACK);
-        textRenderer.setColor(new Color(0xe4ad00));
-        textRenderer.setScale(5);
+        textRenderer.setBackgroundColor(new Color(0xe4ad00));
+        textRenderer.setColor(Color.white);
+        textRenderer.setScale(3);
     }
 
     public void showCount() {
-        text = "Počet baget: " + count;
+        text = "Bagety: " + count;
         textRenderer.addStr2D(40, 80, text);
     }
-
-
 }

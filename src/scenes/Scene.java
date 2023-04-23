@@ -3,7 +3,10 @@ package scenes;
 import entity.Bob;
 import entity.Entity;
 import entity.ItemManager;
+import lwjglutils.OGLTextRenderer;
+import messages.Message;
 import map.*;
+import messages.MessageManager;
 
 import java.util.ArrayList;
 
@@ -19,11 +22,13 @@ public abstract class Scene {
     protected VoidTex voidTex;
     public Position playerPos;
     protected int sceneID = 0;
+    protected MessageManager messageManager;
 
 
-    public Scene(MapBuilder builder) {
+
+    public Scene(MapBuilder builder, OGLTextRenderer textRenderer) {
         this.mapBuilder = builder;
-        init();
+        messageManager = new MessageManager(textRenderer);
     }
 
     protected void init() {
@@ -73,5 +78,9 @@ public abstract class Scene {
 
     public int getSceneID() {
         return sceneID;
+    }
+
+    public void nextMessage() {
+        messageManager.next(playerPos);
     }
 }

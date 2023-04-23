@@ -40,7 +40,8 @@ public class MapChecker {
         return 0;
     }
 
-    public void addSpecialPos(Position pos, int sceneID) {
+    public void addTeleportPos(Position pos, int sceneID) {
         teleport.add(new Position(pos, sceneID));
     }
+
 }
