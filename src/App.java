@@ -7,7 +7,7 @@ public class App {
         new Window(new Renderer());
     }
 
-    //TODO: Zprávy a akumulátor zpráv
+    //DONE: Zprávy a akumulátor zpráv
     //TODO: boss fight
     //TODO: zvuky?
     //TODO: Inventář

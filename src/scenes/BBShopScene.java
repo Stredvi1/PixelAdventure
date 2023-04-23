@@ -2,6 +2,7 @@ package scenes;
 
 import entity.Building;
 import entity.Bob;
+import entity.Inventory;
 import entity.NPC;
 import lwjglutils.OGLTextRenderer;
 import map.*;

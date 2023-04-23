@@ -1,11 +1,6 @@
 package render;
 
-import controller.BagetCounter;
-import entity.Bob;
-import entity.Entity;
-import entity.Item;
-import entity.NPC;
-import lwjglutils.GLCamera;
+import entity.*;
 import map.*;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
@@ -17,8 +12,6 @@ import window.Window;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 
 import static lwjglutils.GluUtils.gluLookAt;
 import static lwjglutils.GluUtils.gluPerspective;
@@ -34,31 +27,17 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class Renderer extends AbstractRenderer {
 
+    public static int WIDTH = Window.WIDTH;
+    public static int HEIGHT = Window.HEIGHT;
+
     private float[] modelMatrix = new float[16];
 
-    private boolean mouseButton1 = false;
-
-    private Map map = new Map();
     private MapBuilder mapBuilder;
-    private Bob bob;
-
-    private int trans = 1;
-    private float[] pos = new float[2];
-    private Position position;
-    private MapChecker checker;
-
-    private VoidTex voidTex;
-    private Item baget;
-
-    private NPC cook;
 
     private Scene ACTIVE, starting, bbShop;
     private ArrayList<Scene> scenes;
 
-    private BagetCounter bc;
-
-    public static int WIDTH = Window.WIDTH;
-    public static int HEIGHT = Window.HEIGHT;
+    public Inventory inventory;
 
     public Renderer() {
         super();
@@ -121,7 +100,10 @@ public class Renderer extends AbstractRenderer {
         glLoadIdentity();
         glGetFloatv(GL_MODELVIEW_MATRIX, modelMatrix);
 
+        textRenderer.setScale(2.5);
+
         mapBuilder = new MapBuilder();
+        inventory = new Inventory(textRenderer);
 
         starting = new StartingScene(mapBuilder, textRenderer);
         bbShop = new BBShopScene(mapBuilder, textRenderer);
@@ -131,7 +113,6 @@ public class Renderer extends AbstractRenderer {
 
         ACTIVE = starting;
 
-        bc = new BagetCounter(textRenderer);
 
         glEnable(GL_TEXTURE_2D);
 
@@ -163,7 +144,8 @@ public class Renderer extends AbstractRenderer {
         glLoadIdentity();
 
         ACTIVE.render();
-        bc.showCount();
+
+        inventory.showInventory();
 
 
     }
@@ -196,8 +178,8 @@ public class Renderer extends AbstractRenderer {
                         System.out.println("scale 6");
                         textRenderer.setScale(6);
                     } else if (width >= 1000) {
-                        System.out.println("scale 3");
-                        textRenderer.setScale(3);
+                        System.out.println("scale 2.5");
+                        textRenderer.setScale(2.5);
                     } else {
                         System.out.println("scale 2");
                         textRenderer.setScale(2);

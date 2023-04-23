@@ -2,9 +2,8 @@ package scenes;
 
 import entity.Bob;
 import entity.Entity;
-import entity.ItemManager;
+import entity.Inventory;
 import lwjglutils.OGLTextRenderer;
-import messages.Message;
 import map.*;
 import messages.MessageManager;
 
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 public abstract class Scene {
 
     protected ArrayList<Entity> entityList;
-    protected ItemManager items;
+    protected Inventory items;
     protected Bob bob;
     protected Map map;
     protected int[][] mapDesign;

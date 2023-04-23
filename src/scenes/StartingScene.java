@@ -2,6 +2,7 @@ package scenes;
 
 import entity.Building;
 import entity.Bob;
+import entity.Inventory;
 import entity.Item;
 import lwjglutils.OGLTextRenderer;
 import map.*;
@@ -43,9 +44,9 @@ public class StartingScene extends Scene {
         bob = new Bob(playerPos);
 
         bbShop = new Building(new Position(12, 0),"bb_shop.png", 3);
-        baget = new Item(new Position(5, 8), "bb.png");
-        baget1 = new Item(new Position(12, 6), "bb.png");
-        baget2 = new Item(new Position(14, 8), "bb.png");
+        baget = new Item(new Position(5, 8), "bb.png", Inventory.ItemType.BAGET);
+        baget1 = new Item(new Position(12, 6), "bb.png", Inventory.ItemType.BAGET);
+        baget2 = new Item(new Position(14, 8), "bb.png", Inventory.ItemType.BAGET);
 
 
         mapChecker.addTeleportPos(new Position(13, 0), 2);
@@ -58,6 +59,7 @@ public class StartingScene extends Scene {
         bbShop.render();
 
         if(showSecretBaget) {
+            Inventory.SHOW_INVENTORY = true;
             baget.render();
             baget1.render();
             baget2.render();
