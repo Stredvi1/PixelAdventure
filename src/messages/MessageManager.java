@@ -87,16 +87,12 @@ public class MessageManager {
         glColor3f(bgColor.getRed() / 255f, bgColor.getGreen() / 255f, bgColor.getBlue() / 255f);
         glBegin(GL_QUADS);
 
-        glTexCoord2f(0, 0);
         glVertex2f(-size, 0);
 
-        glTexCoord2f(1, 0);
         glVertex2f(size, 0);
 
-        glTexCoord2f(1, 1);
         glVertex2f(size, height);
 
-        glTexCoord2f(0, 1);
         glVertex2f(-size, height);
 
         glEnd();

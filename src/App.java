@@ -8,9 +8,9 @@ public class App {
     }
 
     //DONE: Zprávy a akumulátor zpráv
-    //TODO: boss fight
+    //DONE: boss fight
     //TODO: zvuky?
-    //TODO: Inventář
+    //DONE: Inventář
     //TODO: Questy + quest show
     //TODO: Dodělat mapy, NPS, budovy
 

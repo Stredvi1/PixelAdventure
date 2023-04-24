@@ -1,10 +1,12 @@
 package render;
 
 import entity.*;
+import gameStuff.DamageBar;
 import map.*;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import scenes.BBShopScene;
+import scenes.BossFightScene;
 import scenes.Scene;
 import scenes.StartingScene;
 import window.Window;
@@ -18,13 +20,7 @@ import static lwjglutils.GluUtils.gluPerspective;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
-/**
- * Shows using 3D transformation and interaction in a scene
- *
- * @author PGRF FIM UHK
- * @version 3.1
- * @since 2020-01-20
- */
+
 public class Renderer extends AbstractRenderer {
 
     public static int WIDTH = Window.WIDTH;
@@ -34,7 +30,7 @@ public class Renderer extends AbstractRenderer {
 
     private MapBuilder mapBuilder;
 
-    private Scene ACTIVE, starting, bbShop;
+    private Scene ACTIVE, starting, bbShop, bossFight;
     private ArrayList<Scene> scenes;
 
     public Inventory inventory;
@@ -71,10 +67,14 @@ public class Renderer extends AbstractRenderer {
                             break;
                         case GLFW_KEY_ENTER:
                             ACTIVE.nextMessage();
+                            break;
+                        case GLFW_KEY_SPACE:
+                            if (ACTIVE.hasFight) {
+                                ACTIVE.hit();
+                            }
                     }
                     teleportID = ACTIVE.checkCurrentPos();
                     if (teleportID != 0 && teleportID != ACTIVE.getSceneID()) {
-                        System.out.println("HUH? UPDATE");
                         updateActiveScene(teleportID);
 
                     }
@@ -99,17 +99,20 @@ public class Renderer extends AbstractRenderer {
 
         glLoadIdentity();
         glGetFloatv(GL_MODELVIEW_MATRIX, modelMatrix);
+        glLineWidth(4);
 
         textRenderer.setScale(2.5);
+
 
         mapBuilder = new MapBuilder();
         inventory = new Inventory(textRenderer);
 
         starting = new StartingScene(mapBuilder, textRenderer);
         bbShop = new BBShopScene(mapBuilder, textRenderer);
+        bossFight = new BossFightScene(mapBuilder,textRenderer);
 
         scenes = new ArrayList<>();
-        scenes.addAll(Arrays.asList(starting, bbShop));
+        scenes.addAll(Arrays.asList(starting, bbShop, bossFight));
 
         ACTIVE = starting;
 
@@ -147,7 +150,6 @@ public class Renderer extends AbstractRenderer {
 
         inventory.showInventory();
 
-
     }
 
     private void clearBuffers() {
@@ -177,12 +179,15 @@ public class Renderer extends AbstractRenderer {
                     if(width >= 3000) {
                         System.out.println("scale 6");
                         textRenderer.setScale(6);
+                        glLineWidth(12);
                     } else if (width >= 1000) {
                         System.out.println("scale 2.5");
                         textRenderer.setScale(2.5);
+                        glLineWidth(4);
                     } else {
                         System.out.println("scale 2");
                         textRenderer.setScale(2);
+                        glLineWidth(3);
                     }
                 }
             }

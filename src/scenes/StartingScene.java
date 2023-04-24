@@ -48,8 +48,8 @@ public class StartingScene extends Scene {
         baget1 = new Item(new Position(12, 6), "bb.png", Inventory.ItemType.BAGET);
         baget2 = new Item(new Position(14, 8), "bb.png", Inventory.ItemType.BAGET);
 
-
         mapChecker.addTeleportPos(new Position(13, 0), 2);
+        mapChecker.addTeleportPos(new Position(0, 1), 3);
 
     }
 

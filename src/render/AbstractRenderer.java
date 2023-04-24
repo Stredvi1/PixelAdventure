@@ -5,6 +5,9 @@ import lwjglutils.OGLUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.DoubleBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -28,8 +31,8 @@ public abstract class AbstractRenderer {
     }
 
     public AbstractRenderer() {
-        this.width = 600;
-        this.height = 400;
+        this.width = 1280;
+        this.height = 720;
     }
 
     public void init() {
@@ -39,6 +42,8 @@ public abstract class AbstractRenderer {
         OGLUtils.shaderCheck();
         // Set the clear color
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+
         textRenderer = new OGLTextRenderer(width, height);
     }
 

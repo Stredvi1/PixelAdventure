@@ -19,9 +19,10 @@ public abstract class Scene {
     protected MapBuilder mapBuilder;
     protected MapChecker mapChecker;
     protected VoidTex voidTex;
-    public Position playerPos;
+    protected Position playerPos;
     protected int sceneID = 0;
     protected MessageManager messageManager;
+    public boolean hasFight = false;
 
 
 
@@ -81,5 +82,9 @@ public abstract class Scene {
 
     public void nextMessage() {
         messageManager.next(playerPos);
+    }
+
+    public void hit(){
+
     }
 }
