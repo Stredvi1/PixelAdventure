@@ -2,6 +2,7 @@ package gameStuff;
 
 import map.MapBuilder;
 import map.Position;
+import render.Renderer;
 
 import java.awt.*;
 
@@ -35,7 +36,7 @@ public class DamageBar {
     private float middleWidth = dmgBarWidth * 0.02f;
 
     private Color outline = new Color(0x4f4b4a);
-    private Color cursor = new Color(0xe4ad00);
+    private Color cursor = Renderer.mainColor;
 
     private float cursorPos = 0;
     private float cursorSpeed = 0.6f;

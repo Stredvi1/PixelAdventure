@@ -15,13 +15,13 @@ public class Message {
     }
 
     public Message(String text, Position pos) {
-        this.text = "VITO:  " + text;
+        this.text = text;
         this.posToShowMessage = pos;
         this.checkPos = true;
     }
 
     public Message(String text) {
-        this.text = "VITO:  " + text;
+        this.text = text;
         this.posToShowMessage = null;
         this.checkPos = false;
     }

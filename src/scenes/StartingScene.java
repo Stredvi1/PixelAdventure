@@ -4,14 +4,18 @@ import entity.Building;
 import entity.Bob;
 import entity.Inventory;
 import entity.Item;
+import gameStuff.Sound;
 import lwjglutils.OGLTextRenderer;
 import map.*;
+import quests.Quest;
+import render.Renderer;
 
 public class StartingScene extends Scene {
 
     private Building bbShop;
     public static boolean showSecretBaget = false;
     private Item baget, baget1, baget2;
+    private boolean added = false;
 
     public StartingScene(MapBuilder builder, OGLTextRenderer textRenderer) {
         super(builder, textRenderer);
@@ -20,7 +24,8 @@ public class StartingScene extends Scene {
     }
 
     protected void init() {
-        System.out.println("INIT MESsAGES *******************************");
+
+        bgMusic = new Sound("audio/music/welcome.ogg", true);
         mapDesign = new int[][]{
                 {-1,2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 5, 5, 5, 4, 2},
                 {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 4, 4, 2},
@@ -51,12 +56,17 @@ public class StartingScene extends Scene {
         mapChecker.addTeleportPos(new Position(13, 0), 2);
         mapChecker.addTeleportPos(new Position(0, 1), 3);
 
+        bgMusic.play();
+
+        initMessages();
     }
 
     public void render() {
         voidTex.render();
         mapBuilder.renderMap(this.map);
         bbShop.render();
+
+
 
         if(showSecretBaget) {
             Inventory.SHOW_INVENTORY = true;
@@ -67,8 +77,23 @@ public class StartingScene extends Scene {
             baget.pickUp(playerPos);
             baget1.pickUp(playerPos);
             baget2.pickUp(playerPos);
+
         }
 
         bob.render();
+
+        messageManager.showMessage(playerPos);
+
+        if(messageManager.isLastMessagege() && !added) {
+            System.out.println("LAST MESSAGE");
+            added = true;
+            Renderer.questManager.addQuest(new Quest("VITO", "Kup si bagetu", 1));
+        }
+    }
+
+    private void initMessages() {
+        messageManager.addBobMessage("Hmm, mám chuť na bagetu...");
+        messageManager.addBobMessage("Ještě že je kousek odsud Bageterka.");
+
     }
 }

@@ -17,13 +17,14 @@ public class MessageManager {
     private final OGLTextRenderer textRenderer;
     private ArrayList<Message> messages;
     private int parcelRadius = 1;
-    private Color bgColor = new Color(0xe4ad00);
+    private Color bgColor = Renderer.mainColor;
 
     private float size = MapBuilder.MAP_SIZE * 16 / 2f;
     private float height = MapBuilder.MAP_SIZE * 2;
 
     private int currentIndex = 0;
 
+    private boolean isLastMessage = false;
 
     public MessageManager(OGLTextRenderer textRenderer) {
         this.textRenderer = textRenderer;
@@ -73,37 +74,45 @@ public class MessageManager {
     private void increaseIndex() {
         if (currentIndex < messages.size() - 1) {
             currentIndex++;
+        } else {
+            isLastMessage = true;
         }
     }
 
     private void show(Position pos) {
 
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
-        glLoadIdentity();
+        if(!isLastMessage) {
 
-        glTranslatef(pos.toMap()[0], pos.toMap()[1] - height * 2, 2);
-        glDisable(GL_TEXTURE_2D);
-        glColor3f(bgColor.getRed() / 255f, bgColor.getGreen() / 255f, bgColor.getBlue() / 255f);
-        glBegin(GL_QUADS);
+            glDisable(GL_TEXTURE_2D);
+            glMatrixMode(GL_MODELVIEW);
+            glPushMatrix();
+            glLoadIdentity();
 
-        glVertex2f(-size, 0);
+            glTranslatef(pos.toMap()[0], pos.toMap()[1] - height * 2, 2);
 
-        glVertex2f(size, 0);
+            glColor3f(bgColor.getRed() / 255f, bgColor.getGreen() / 255f, bgColor.getBlue() / 255f);
+            glBegin(GL_QUADS);
 
-        glVertex2f(size, height);
+            glVertex2f(-size, 0);
+            glVertex2f(size, 0);
+            glVertex2f(size, height);
+            glVertex2f(-size, height);
 
-        glVertex2f(-size, height);
+            glEnd();
 
-        glEnd();
-        glPopMatrix();
 
-        glEnable(GL_TEXTURE_2D);
-        textRenderer.addStr2D(Renderer.WIDTH / 20, (int) (Renderer.HEIGHT - Renderer.HEIGHT * 0.1), messages.get(currentIndex).toString());
+            glEnable(GL_TEXTURE_2D);
+            glPopMatrix();
+            textRenderer.addStr2D(Renderer.WIDTH / 20, (int) (Renderer.HEIGHT - Renderer.HEIGHT * 0.1), messages.get(currentIndex).toString());
+        }
     }
 
 
     public void setRadius(int parcelRadius) {
         this.parcelRadius = parcelRadius;
+    }
+
+    public boolean isLastMessagege() {
+        return isLastMessage;
     }
 }

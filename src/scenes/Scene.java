@@ -3,6 +3,7 @@ package scenes;
 import entity.Bob;
 import entity.Entity;
 import entity.Inventory;
+import gameStuff.Sound;
 import lwjglutils.OGLTextRenderer;
 import map.*;
 import messages.MessageManager;
@@ -23,6 +24,7 @@ public abstract class Scene {
     protected int sceneID = 0;
     protected MessageManager messageManager;
     public boolean hasFight = false;
+    protected Sound bgMusic;
 
 
 

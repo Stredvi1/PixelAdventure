@@ -7,6 +7,7 @@ import map.Map;
 import map.MapBuilder;
 import map.Position;
 import map.VoidTex;
+import render.Renderer;
 
 public class BossFightScene extends Scene{
 
@@ -37,6 +38,7 @@ public class BossFightScene extends Scene{
         bob = new Bob(playerPos);
         voidTex = new VoidTex(playerPos, false);
         mapChecker.addTeleportPos(new Position(4, 5), 1);
+
     }
 
     private void initMessages() {

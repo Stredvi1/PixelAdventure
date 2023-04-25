@@ -1,12 +1,11 @@
 package render;
 
 import entity.*;
-import gameStuff.DamageBar;
-import gameStuff.Sound;
 import map.*;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
-import org.lwjgl.system.CallbackI;
+import quests.Quest;
+import quests.QuestManager;
 import scenes.BBShopScene;
 import scenes.BossFightScene;
 import scenes.Scene;
@@ -14,6 +13,7 @@ import scenes.StartingScene;
 import window.Window;
 
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -36,9 +36,11 @@ public class Renderer extends AbstractRenderer {
     private ArrayList<Scene> scenes;
 
     public Inventory inventory;
+    public static QuestManager questManager;
+
+    public static Color mainColor = new Color(0xe4ad00);
 
     private double initScaleText = 1.5;
-    private Sound music;
 
     public Renderer() {
         super();
@@ -77,6 +79,10 @@ public class Renderer extends AbstractRenderer {
                             if (ACTIVE.hasFight) {
                                 ACTIVE.hit();
                             }
+                            break;
+                        case GLFW_KEY_TAB:
+                            questManager.toggle();
+                            break;
                     }
                     teleportID = ACTIVE.checkCurrentPos();
                     if (teleportID != 0 && teleportID != ACTIVE.getSceneID()) {
@@ -111,14 +117,15 @@ public class Renderer extends AbstractRenderer {
 
         mapBuilder = new MapBuilder();
         inventory = new Inventory(textRenderer);
+        questManager = new QuestManager(textRenderer);
 
         starting = new StartingScene(mapBuilder, textRenderer);
         bbShop = new BBShopScene(mapBuilder, textRenderer);
         bossFight = new BossFightScene(mapBuilder,textRenderer);
-        music = new Sound("audio/music/welcome.ogg", true);
 
         scenes = new ArrayList<>();
         scenes.addAll(Arrays.asList(starting, bbShop, bossFight));
+
 
         ACTIVE = starting;
 
@@ -159,7 +166,7 @@ public class Renderer extends AbstractRenderer {
 
         inventory.showInventory();
 
-        music.play();
+        questManager.render(ACTIVE.getPlayerPos());
 
     }
 
@@ -186,6 +193,7 @@ public class Renderer extends AbstractRenderer {
                 System.out.println("Windows resize to [" + w + ", " + h + "]");
                 if (textRenderer != null) {
                     textRenderer.resize(width, height);
+                    questManager.resize(width, height);
 
                     if(width >= 3000) {
                         textRenderer.setScale(4);

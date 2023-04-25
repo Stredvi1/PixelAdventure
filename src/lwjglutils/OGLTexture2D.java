@@ -232,7 +232,7 @@ public class OGLTexture2D implements OGLTexture {
         IntBuffer height = BufferUtils.createIntBuffer(1);
         IntBuffer components = BufferUtils.createIntBuffer(1);
         
-        System.out.print("Reading texture file " + fileName);
+        //System.out.print("Reading texture file " + fileName);
 		
         ByteBuffer imageBuffer  = ioResourceToByteBuffer(fileName, 1024);
 		stbi_set_flip_vertically_on_load(true);
@@ -245,7 +245,7 @@ public class OGLTexture2D implements OGLTexture {
         if (data == null)
             throw new IOException("Failed to load image: " + stbi_failure_reason());
         
-        System.out.println(" ... OK [" + width.get(0) + "x" + height.get(0) + "]");
+        //System.out.println(" ... OK [" + width.get(0) + "x" + height.get(0) + "]");
         
         data.rewind();
 

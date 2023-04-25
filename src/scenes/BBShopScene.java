@@ -6,12 +6,16 @@ import entity.Inventory;
 import entity.NPC;
 import lwjglutils.OGLTextRenderer;
 import map.*;
+import quests.Quest;
+import render.Renderer;
 
 public class BBShopScene extends Scene{
 
     private NPC bbMaestro;
     private boolean firstRender = true;
     private Building bbOrders;
+
+    private boolean added = false;
 
     public BBShopScene(MapBuilder builder, OGLTextRenderer textRenderer) {
         super(builder, textRenderer);
@@ -76,6 +80,7 @@ public class BBShopScene extends Scene{
         if(firstRender) {
             firstRender = false;
             StartingScene.showSecretBaget = true;
+            Renderer.questManager.finishQuest(1);
         }
         voidTex.render();
         mapBuilder.renderMap(this.map);
@@ -84,6 +89,12 @@ public class BBShopScene extends Scene{
         bob.render();
 
         messageManager.showMessage(playerPos);
+
+
+        if(messageManager.isLastMessagege() && !added) {
+            added = true;
+            Renderer.questManager.addQuest(new Quest("BB Maestro", "Získej zpět tajný recept", 2));
+        }
     }
 
 
