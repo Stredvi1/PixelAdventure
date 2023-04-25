@@ -2,6 +2,7 @@ package scenes;
 
 import entity.Bob;
 import gameStuff.DamageBar;
+import gameStuff.Sound;
 import lwjglutils.OGLTextRenderer;
 import map.Map;
 import map.MapBuilder;
@@ -15,13 +16,14 @@ public class BossFightScene extends Scene{
 
     public BossFightScene(MapBuilder builder, OGLTextRenderer textRenderer) {
         super(builder, textRenderer);
-        sceneID = 3;
+        sceneID = 9;
         hasFight = true;
         bar = new DamageBar();
-        init();
     }
 
-    protected void init() {
+    public void init() {
+
+        bgMusic = new Sound("audio/music/boss.ogg", true);
 
         mapDesign = new int[][] {
                 {-1,-1,3, 5, 5, 5, 5, 5,-1},
@@ -36,7 +38,7 @@ public class BossFightScene extends Scene{
         super.init();
         playerPos = new Position(4, 5);
         bob = new Bob(playerPos);
-        voidTex = new VoidTex(playerPos, false);
+        voidTex = new VoidTex(playerPos, "textures/lava.png");
         mapChecker.addTeleportPos(new Position(4, 5), 1);
 
     }

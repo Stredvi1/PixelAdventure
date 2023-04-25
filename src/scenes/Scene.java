@@ -4,6 +4,7 @@ import entity.Bob;
 import entity.Entity;
 import entity.Inventory;
 import gameStuff.Sound;
+import items.ItemManager;
 import lwjglutils.OGLTextRenderer;
 import map.*;
 import messages.MessageManager;
@@ -25,6 +26,12 @@ public abstract class Scene {
     protected MessageManager messageManager;
     public boolean hasFight = false;
     protected Sound bgMusic;
+    protected Sound footstep;
+
+    protected ItemManager itemManager;
+
+
+    public boolean isInit = false;
 
 
 
@@ -33,8 +40,12 @@ public abstract class Scene {
         messageManager = new MessageManager(textRenderer);
     }
 
-    protected void init() {
+    public void init() {
+        isInit = true;
+        map = new Map(mapDesign);
         mapChecker = new MapChecker(map);
+        itemManager = new ItemManager();
+        footstep = new Sound("audio/sounds/footstep.ogg", false, true);
     }
 
     public void render() {
@@ -50,6 +61,7 @@ public abstract class Scene {
 
         if(mapChecker.checkMove(playerPos.getX(), newY)) {
             this.playerPos.y(newY);
+            footstep.play();
         }
     }
 
@@ -58,6 +70,7 @@ public abstract class Scene {
 
         if(mapChecker.checkMove(playerPos.getX(), newY)) {
             this.playerPos.y(newY);
+            footstep.play();
         }
     }
     public void left() {
@@ -65,6 +78,7 @@ public abstract class Scene {
 
         if(mapChecker.checkMove(newX, playerPos.getY())) {
             this.playerPos.x(newX);
+            footstep.play();
         }
     }
     public void right() {
@@ -72,6 +86,7 @@ public abstract class Scene {
 
         if(mapChecker.checkMove(newX, playerPos.getY())) {
             this.playerPos.x(newX);
+            footstep.play();
         }
     }
     public int checkCurrentPos() {
@@ -88,5 +103,17 @@ public abstract class Scene {
 
     public void hit(){
 
+    }
+
+    public void stopMusic() {
+        if(bgMusic != null) {
+            bgMusic.stop();
+        }
+    }
+
+    public void playMusic() {
+        if(bgMusic != null) {
+            bgMusic.play();
+        }
     }
 }

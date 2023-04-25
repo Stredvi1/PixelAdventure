@@ -2,8 +2,8 @@ package scenes;
 
 import entity.Building;
 import entity.Bob;
-import entity.Inventory;
 import entity.NPC;
+import gameStuff.Sound;
 import lwjglutils.OGLTextRenderer;
 import map.*;
 import quests.Quest;
@@ -20,13 +20,13 @@ public class BBShopScene extends Scene{
     public BBShopScene(MapBuilder builder, OGLTextRenderer textRenderer) {
         super(builder, textRenderer);
         sceneID = 2;
-        init();
 
     }
 
     @Override
-    protected void init() {
+    public void init() {
 
+        bgMusic = new Sound("audio/music/bageterka.ogg", true);
 
         mapDesign = new int[][] {
                 {-1,-1,-1, 6, 6, 6,-1,-1,-1},
@@ -47,7 +47,7 @@ public class BBShopScene extends Scene{
         Position maestroPos = new Position(4,0);
 
         bbMaestro = new NPC(maestroPos, "BB Maestro", "bb_maestro.png");
-        voidTex = new VoidTex(playerPos, false);
+        voidTex = new VoidTex(playerPos, "textures/void.png");
 
         bbOrders = new Building(new Position(3, 1), "bb_orders.png", 3);
 
@@ -79,7 +79,7 @@ public class BBShopScene extends Scene{
     public void render() {
         if(firstRender) {
             firstRender = false;
-            StartingScene.showSecretBaget = true;
+            StartingScene.showItems = true;
             Renderer.questManager.finishQuest(1);
         }
         voidTex.render();

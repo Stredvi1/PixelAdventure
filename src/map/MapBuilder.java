@@ -43,7 +43,8 @@ public class MapBuilder {
             //Loop for rows
             for (int j = 0; j < map.getRowLength(i); j++) {
                 //Loop for parcels
-                int parcel = map.getParcel(i, j);
+
+                int parcel = map.getParcel(i,j);
 
                 switch (parcel) {
                     case Map.WATER -> water.bind();

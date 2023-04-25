@@ -3,8 +3,8 @@ package scenes;
 import entity.Building;
 import entity.Bob;
 import entity.Inventory;
-import entity.Item;
 import gameStuff.Sound;
+import items.Item;
 import lwjglutils.OGLTextRenderer;
 import map.*;
 import quests.Quest;
@@ -13,17 +13,16 @@ import render.Renderer;
 public class StartingScene extends Scene {
 
     private Building bbShop;
-    public static boolean showSecretBaget = false;
-    private Item baget, baget1, baget2;
+    public static boolean showItems = false;
     private boolean added = false;
+    private boolean start = true;
 
     public StartingScene(MapBuilder builder, OGLTextRenderer textRenderer) {
         super(builder, textRenderer);
         sceneID = 1;
-        init();
     }
 
-    protected void init() {
+    public void init() {
 
         bgMusic = new Sound("audio/music/welcome.ogg", true);
         mapDesign = new int[][]{
@@ -37,26 +36,32 @@ public class StartingScene extends Scene {
                 {-1,-1,-1,-1,3, 3, 2,-1,-1,-1, 2, 4, 5, 5, 4, 2, 2},
                 {-1,-1,-1,-1,-1,3, -1,-1,-1,-1, 2, 4, 5, 5, 4, 2},
                 {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 2, 4, 5, 5, 4, 2},
+                {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 2, 4, 5, 5, 4, 2, 2},
+                {-1,-1,-1,-1,-1,-1,-1,-1,-1, 2, 2, 4, 5, 5, 4, 2, 2},
+                {-1,-1,-1,-1,-1,-1,-1,-1,-1, 2, 2, 4, 5, 5, 4, 2, 2},
+                {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 2, 4, 5, 5, 4, 2},
+                {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 2, 4, 5, 5, 4, 2},
+
 
         };
-
-        map = new Map(mapDesign);
 
         super.init();
         playerPos = new Position(1,1);
 
-        voidTex = new VoidTex(playerPos, true);
+        voidTex = new VoidTex(playerPos);
         bob = new Bob(playerPos);
 
         bbShop = new Building(new Position(12, 0),"bb_shop.png", 3);
-        baget = new Item(new Position(5, 8), "bb.png", Inventory.ItemType.BAGET);
-        baget1 = new Item(new Position(12, 6), "bb.png", Inventory.ItemType.BAGET);
-        baget2 = new Item(new Position(14, 8), "bb.png", Inventory.ItemType.BAGET);
+
+        itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(5, 8)));
+        itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(12, 6)));
+        itemManager.addItem(new Item(Inventory.ItemType.BAGET,new Position(14, 8)));
 
         mapChecker.addTeleportPos(new Position(13, 0), 2);
-        mapChecker.addTeleportPos(new Position(0, 1), 3);
+        mapChecker.addTeleportPos(new Position(0, 1), 9);
+        mapChecker.addTeleportPos(new Position(13, 14), 3);
+        mapChecker.addTeleportPos(new Position(12, 14), 3);
 
-        bgMusic.play();
 
         initMessages();
     }
@@ -66,18 +71,15 @@ public class StartingScene extends Scene {
         mapBuilder.renderMap(this.map);
         bbShop.render();
 
-
-
-        if(showSecretBaget) {
-            Inventory.SHOW_INVENTORY = true;
-            baget.render();
-            baget1.render();
-            baget2.render();
-
-            baget.pickUp(playerPos);
-            baget1.pickUp(playerPos);
-            baget2.pickUp(playerPos);
-
+        if(showItems) {
+            if(start) {
+                start = false;
+                Inventory.SHOW_INVENTORY = true;
+                bgMusic.delete();
+                bgMusic = new Sound("audio/music/challengeAccepted.ogg", true);
+                bgMusic.play();
+            }
+            itemManager.renderItems(playerPos);
         }
 
         bob.render();

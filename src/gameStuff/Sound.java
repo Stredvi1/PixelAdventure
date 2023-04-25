@@ -14,62 +14,71 @@ import static org.lwjgl.system.libc.LibCStdlib.free;
 public class Sound {
     private int bufferId;
     private int sourceId;
-    private String filepath;
+    private final String filepath;
+    private boolean playMultiple = false;
 
     private boolean isPlaying = false;
 
     public Sound(String filepath, boolean loops) {
+        this(filepath, loops, false);
+    }
+
+    public Sound(String filepath, boolean loops, boolean playMultiple) {
         this.filepath = filepath;
+        this.playMultiple = playMultiple;
+
+        System.out.println("Načítám zvuk " + filepath);
 
         URL url = Thread.currentThread().getContextClassLoader().getResource(filepath);
         if (url == null) {
-            assert false: "Classpath resource not found: " + filepath;
-        }
-        File file = new File(url.getFile());
+            System.out.println("Classpath resource not found: " + filepath);
+        } else {
+            File file = new File(url.getFile());
 
-        // Allocate space to store the return information from stb
-        stackPush();
-        IntBuffer channelsBuffer = stackMallocInt(1);
-        stackPush();
-        IntBuffer sampleRateBuffer = stackMallocInt(1);
+            // Allocate space to store the return information from stb
+            stackPush();
+            IntBuffer channelsBuffer = stackMallocInt(1);
+            stackPush();
+            IntBuffer sampleRateBuffer = stackMallocInt(1);
 
-        ShortBuffer rawAudioBuffer =
-                stb_vorbis_decode_filename(file.getPath(), channelsBuffer, sampleRateBuffer);
-        if (rawAudioBuffer == null) {
-            System.out.println("Could not load sound '" + file.getPath() + "'");
+            ShortBuffer rawAudioBuffer =
+                    stb_vorbis_decode_filename(file.getPath(), channelsBuffer, sampleRateBuffer);
+            if (rawAudioBuffer == null) {
+                System.out.println("Could not load sound '" + file.getPath() + "'");
+                stackPop();
+                stackPop();
+                return;
+            }
+
+            // Retrieve the extra information that was stored in the buffers by stb
+            int channels = channelsBuffer.get();
+            int sampleRate = sampleRateBuffer.get();
+            // Free
             stackPop();
             stackPop();
-            return;
+
+            // Find the correct openAL format
+            int format = -1;
+            if (channels == 1) {
+                format = AL_FORMAT_MONO16;
+            } else if (channels == 2) {
+                format = AL_FORMAT_STEREO16;
+            }
+
+            bufferId = alGenBuffers();
+            alBufferData(bufferId, format, rawAudioBuffer, sampleRate);
+
+            // Generate the source
+            sourceId = alGenSources();
+
+            alSourcei(sourceId, AL_BUFFER, bufferId);
+            alSourcei(sourceId, AL_LOOPING, loops ? 1 : 0);
+            alSourcei(sourceId, AL_POSITION, 0);
+            alSourcef(sourceId, AL_GAIN, 0.3f);
+
+            // Free stb raw audio buffer
+            free(rawAudioBuffer);
         }
-
-        // Retrieve the extra information that was stored in the buffers by stb
-        int channels = channelsBuffer.get();
-        int sampleRate = sampleRateBuffer.get();
-        // Free
-        stackPop();
-        stackPop();
-
-        // Find the correct openAL format
-        int format = -1;
-        if (channels == 1) {
-            format = AL_FORMAT_MONO16;
-        } else if (channels == 2) {
-            format = AL_FORMAT_STEREO16;
-        }
-
-        bufferId = alGenBuffers();
-        alBufferData(bufferId, format, rawAudioBuffer, sampleRate);
-
-        // Generate the source
-        sourceId = alGenSources();
-
-        alSourcei(sourceId, AL_BUFFER, bufferId);
-        alSourcei(sourceId, AL_LOOPING, loops ? 1 : 0);
-        alSourcei(sourceId, AL_POSITION, 0);
-        alSourcef(sourceId, AL_GAIN, 0.3f);
-
-        // Free stb raw audio buffer
-        free(rawAudioBuffer);
     }
 
     public void delete() {
@@ -78,13 +87,19 @@ public class Sound {
     }
 
     public void play() {
+
+
         int state = alGetSourcei(sourceId, AL_SOURCE_STATE);
         if (state == AL_STOPPED) {
             isPlaying = false;
             alSourcei(sourceId, AL_POSITION, 0);
         }
-
-        if (!isPlaying) {
+        if (!playMultiple) {
+            if (!isPlaying) {
+                alSourcePlay(sourceId);
+                isPlaying = true;
+            }
+        } else {
             alSourcePlay(sourceId);
             isPlaying = true;
         }

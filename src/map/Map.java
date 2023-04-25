@@ -68,8 +68,7 @@ public class Map {
     }
 
     public int getParcel(int row, int index) {
-        //TODO PODMÍNKA
-        if (row < this.getHeight() && index < this.getWidth()) {
+        if (row < this.getHeight() && index < this.getRowLength(row)) {
             return design[row][index];
         }
         return -1;
@@ -79,10 +78,6 @@ public class Map {
         return design.length;
     }
 
-    public int getWidth() {
-        return design[0].length;
-
-    }
 
     public int getRowLength(int row) {
         return design[row].length;

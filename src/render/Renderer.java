@@ -6,10 +6,7 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import quests.Quest;
 import quests.QuestManager;
-import scenes.BBShopScene;
-import scenes.BossFightScene;
-import scenes.Scene;
-import scenes.StartingScene;
+import scenes.*;
 import window.Window;
 
 
@@ -32,7 +29,7 @@ public class Renderer extends AbstractRenderer {
 
     private MapBuilder mapBuilder;
 
-    private Scene ACTIVE, starting, bbShop, bossFight;
+    private Scene ACTIVE, starting, bbShop, lostGranny, bossFight;
     private ArrayList<Scene> scenes;
 
     public Inventory inventory;
@@ -87,7 +84,6 @@ public class Renderer extends AbstractRenderer {
                     teleportID = ACTIVE.checkCurrentPos();
                     if (teleportID != 0 && teleportID != ACTIVE.getSceneID()) {
                         updateActiveScene(teleportID);
-
                     }
                 }
             }
@@ -121,13 +117,16 @@ public class Renderer extends AbstractRenderer {
 
         starting = new StartingScene(mapBuilder, textRenderer);
         bbShop = new BBShopScene(mapBuilder, textRenderer);
+        lostGranny = new LostGrandmaScene(mapBuilder, textRenderer);
         bossFight = new BossFightScene(mapBuilder,textRenderer);
 
         scenes = new ArrayList<>();
-        scenes.addAll(Arrays.asList(starting, bbShop, bossFight));
+        scenes.addAll(Arrays.asList(starting, bbShop, lostGranny, bossFight));
 
 
         ACTIVE = starting;
+        ACTIVE.init();
+        ACTIVE.playMusic();
 
 
         glEnable(GL_TEXTURE_2D);
@@ -179,7 +178,12 @@ public class Renderer extends AbstractRenderer {
 
         for(Scene scene : scenes) {
             if(scene.getSceneID() == teleportID) {
+                ACTIVE.stopMusic();
                 ACTIVE = scene;
+                if(!ACTIVE.isInit) {
+                    ACTIVE.init();
+                }
+                ACTIVE.playMusic();
             }
         }
     }

@@ -1,5 +1,6 @@
 package messages;
 
+import gameStuff.Sound;
 import lwjglutils.OGLTextRenderer;
 import map.MapBuilder;
 import map.Position;
@@ -23,7 +24,7 @@ public class MessageManager {
     private float height = MapBuilder.MAP_SIZE * 2;
 
     private int currentIndex = 0;
-
+    private Sound bip = new Sound("audio/sounds/message.ogg", false, true);
     private boolean isLastMessage = false;
 
     public MessageManager(OGLTextRenderer textRenderer) {
@@ -39,13 +40,13 @@ public class MessageManager {
     }
 
     public void next(Position pos) {
-        if (!messages.get(currentIndex).shouldCheckPos()) {
-            show(pos);
-        } else {
-            if (messages.get(currentIndex).getPos().withinRadius(pos, parcelRadius)) {
+            if (!messages.get(currentIndex).shouldCheckPos()) {
                 show(pos);
+            } else {
+                if (messages.get(currentIndex).getPos().withinRadius(pos, parcelRadius)) {
+                    show(pos);
+                }
             }
-        }
         increaseIndex();
     }
 
@@ -74,6 +75,7 @@ public class MessageManager {
     private void increaseIndex() {
         if (currentIndex < messages.size() - 1) {
             currentIndex++;
+            bip.play();
         } else {
             isLastMessage = true;
         }

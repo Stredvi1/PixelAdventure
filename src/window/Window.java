@@ -1,6 +1,7 @@
 package window;
 
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC;
@@ -12,8 +13,19 @@ import org.lwjgl.system.Configuration;
 import org.lwjgl.system.MemoryStack;
 import render.AbstractRenderer;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 
+import static org.lwjgl.BufferUtils.createByteBuffer;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.openal.ALC10.*;
@@ -99,12 +111,28 @@ public class Window {
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
-        String text = renderer.getClass().getName();
-        text = text.substring(0, text.lastIndexOf('.'));
+
         // Create the window
-        window = glfwCreateWindow(WIDTH, HEIGHT, text, NULL, NULL);
+        window = glfwCreateWindow(WIDTH, HEIGHT, "VITO Baget Adventure", NULL, NULL);
         if (window == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
+
+        // Load window icon
+        try {
+            URL url = Thread.currentThread().getContextClassLoader().getResource("textures/bob.png");
+            BufferedImage bi = ImageIO.read(new java.io.File(url.getFile()));
+            byte[] iconData = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
+            ByteBuffer ib = createByteBuffer(iconData.length);
+            ib.put(iconData);
+            ib.flip();
+            GLFWImage.Buffer gb = GLFWImage.create(1);
+            GLFWImage iconGI = GLFWImage.create().set(339, 339, ib);
+            gb.put(0, iconGI);
+            glfwSetWindowIcon(window, gb);
+        }
+        catch (Exception e){
+            System.out.println("Couldn't open icon image..." + e.toString());
+        }
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(window, renderer.getGlfwKeyCallback());

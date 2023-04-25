@@ -11,21 +11,21 @@ public class VoidTex {
     private int width, height;
 
 
-    public VoidTex(Position pos, boolean isSky) {
+    public VoidTex(Position pos) {
+        this(pos, "textures/sky.png");
+    }
+
+    public VoidTex(Position pos, String fileName) {
         this.pos = pos;
 
         width = 40 * MapBuilder.MAP_SIZE;
         height = 40 * MapBuilder.MAP_SIZE;
-        init(isSky);
+        init(fileName);
     }
 
-    private void init(boolean isSky) {
+    private void init(String fileName) {
         try {
-            if(isSky) {
-                texture = new OGLTexture2D("textures/sky.png");
-            } else {
-                texture = new OGLTexture2D("textures/void.png");
-            }
+            texture = new OGLTexture2D(fileName);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,22 +49,22 @@ public class VoidTex {
 
 
 //        glTranslatef(pos.toMap()[0], pos.toMap()[1], -20);
-        glTranslatef(40 + pos.toMap()[0] / 10, 20 - pos.toMap()[1] / 10, -10);
+        glTranslatef(40 + pos.toMap()[0] / 10, -pos.toMap()[1] / 20, -3);
 
 
         glBegin(GL_QUADS);
 
         glTexCoord2f(-1, -1);
-        glVertex2f(-(width/2f), -(height/2f));
+        glVertex2f(-(width / 2f), -(height / 2f));
 
         glTexCoord2f(1, -1);
-        glVertex2f((width/2f), -(height/2f));
+        glVertex2f((width / 2f), -(height / 2f));
 
         glTexCoord2f(1, 1);
-        glVertex2f((width/2f), (height/2f));
+        glVertex2f((width / 2f), (height / 2f));
 
         glTexCoord2f(-1, 1);
-        glVertex2f(-(width/2f), (height/2f));
+        glVertex2f(-(width / 2f), (height / 2f));
 
         glEnd();
         glPopMatrix();

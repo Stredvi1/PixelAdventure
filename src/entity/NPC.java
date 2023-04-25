@@ -18,6 +18,10 @@ public class NPC extends Entity{
 
     }
 
+    public String getName() {
+        return name;
+    }
+
 
 
 

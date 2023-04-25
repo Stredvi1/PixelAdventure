@@ -11,8 +11,8 @@ public class App {
     //DONE: boss fight
     //DONE: zvuky?
     //DONE: Inventář
-    //TODO: Questy + quest show
-    //TODO: Dodělat mapy, NPS, budovy
+    //DONE: Questy + quest show
+    //TODO: Dodělat mapy, NPC, budovy
     //TODO: VENTOLIN
 
     //Hele jakoby je neděle, pokud kvůli tomu nechci skončit ve cvokhausu,
