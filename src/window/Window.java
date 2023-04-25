@@ -2,6 +2,10 @@ package window;
 
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.openal.AL;
+import org.lwjgl.openal.ALC;
+import org.lwjgl.openal.ALCCapabilities;
+import org.lwjgl.openal.ALCapabilities;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.Configuration;
@@ -12,6 +16,7 @@ import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.openal.ALC10.*;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -23,6 +28,10 @@ public class Window {
     // The window handle
     private long window;
     private AbstractRenderer renderer;
+
+    //Audio
+    private long audioContext;
+    private long audioDevice;
 
     private static boolean DEBUG = false;
 
@@ -62,9 +71,14 @@ public class Window {
 
         renderer.dispose();
 
+        // Destroy audio context
+        alcDestroyContext(audioContext);
+        alcCloseDevice(audioDevice);
+
         // Free the window callbacks and destroy the window
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
+
 
         // Terminate GLFW and free the error callback
         glfwTerminate();
@@ -173,6 +187,21 @@ public class Window {
 
         // Make the window visible
         glfwShowWindow(window);
+
+        //Audio init
+        String defaultDeviceName = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
+        audioDevice = alcOpenDevice(defaultDeviceName);
+
+        int[] attributes = {0};
+        audioContext = alcCreateContext(audioDevice, attributes);
+        alcMakeContextCurrent(audioContext);
+
+        ALCCapabilities alcCapabilities = ALC.createCapabilities(audioDevice);
+        ALCapabilities alCapabilities = AL.createCapabilities(alcCapabilities);
+
+        if(!alCapabilities.OpenAL10) {
+            assert false: "Audio library not supported.";
+        }
     }
 
     private void loop() {

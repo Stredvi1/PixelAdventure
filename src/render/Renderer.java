@@ -2,9 +2,11 @@ package render;
 
 import entity.*;
 import gameStuff.DamageBar;
+import gameStuff.Sound;
 import map.*;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
+import org.lwjgl.system.CallbackI;
 import scenes.BBShopScene;
 import scenes.BossFightScene;
 import scenes.Scene;
@@ -34,6 +36,9 @@ public class Renderer extends AbstractRenderer {
     private ArrayList<Scene> scenes;
 
     public Inventory inventory;
+
+    private double initScaleText = 1.5;
+    private Sound music;
 
     public Renderer() {
         super();
@@ -101,7 +106,7 @@ public class Renderer extends AbstractRenderer {
         glGetFloatv(GL_MODELVIEW_MATRIX, modelMatrix);
         glLineWidth(4);
 
-        textRenderer.setScale(2.5);
+        textRenderer.setScale(initScaleText);
 
 
         mapBuilder = new MapBuilder();
@@ -110,6 +115,7 @@ public class Renderer extends AbstractRenderer {
         starting = new StartingScene(mapBuilder, textRenderer);
         bbShop = new BBShopScene(mapBuilder, textRenderer);
         bossFight = new BossFightScene(mapBuilder,textRenderer);
+        music = new Sound("audio/music/welcome.ogg", true);
 
         scenes = new ArrayList<>();
         scenes.addAll(Arrays.asList(starting, bbShop, bossFight));
@@ -125,6 +131,9 @@ public class Renderer extends AbstractRenderer {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+
+
     }
 
     @Override
@@ -149,6 +158,8 @@ public class Renderer extends AbstractRenderer {
         ACTIVE.render();
 
         inventory.showInventory();
+
+        music.play();
 
     }
 
@@ -177,16 +188,13 @@ public class Renderer extends AbstractRenderer {
                     textRenderer.resize(width, height);
 
                     if(width >= 3000) {
-                        System.out.println("scale 6");
-                        textRenderer.setScale(6);
+                        textRenderer.setScale(4);
                         glLineWidth(12);
                     } else if (width >= 1000) {
-                        System.out.println("scale 2.5");
-                        textRenderer.setScale(2.5);
+                        textRenderer.setScale(initScaleText);
                         glLineWidth(4);
                     } else {
-                        System.out.println("scale 2");
-                        textRenderer.setScale(2);
+                        textRenderer.setScale(1);
                         glLineWidth(3);
                     }
                 }

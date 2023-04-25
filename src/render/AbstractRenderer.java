@@ -24,6 +24,7 @@ public abstract class AbstractRenderer {
     protected int width;
     protected int height;
     protected OGLTextRenderer textRenderer;
+    protected Font customFont;
 
     public AbstractRenderer(int width, int height) {
         this.width = width;
@@ -44,13 +45,20 @@ public abstract class AbstractRenderer {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 
-        textRenderer = new OGLTextRenderer(width, height);
+        try {
+            //create the font to use. Specify the size!
+            customFont = Font.createFont(Font.TRUETYPE_FONT, new File("assets/font/VT323.ttf")).deriveFont(25f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            //register the font
+            ge.registerFont(customFont);
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+        }
+        textRenderer = new OGLTextRenderer(width, height, customFont);
     }
 
     public void display() {
         glViewport(0, 0, width, height);
-        String text = this.getClass().getName() + ": look at console and try keys, mouse, wheel and window interaction ";
-
         pass++;
         // Set the clear color
         glClearColor(
@@ -62,12 +70,6 @@ public abstract class AbstractRenderer {
         // clear the framebuffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //create and draw text
-        textRenderer.clear();
-        textRenderer.addStr2D(3, 20, text);
-        textRenderer.addStr2D(3, 50, "pass " + pass);
-        textRenderer.addStr2D(width - 90, height - 3, " (c) PGRF UHK");
-        textRenderer.draw();
     }
 
     protected GLFWKeyCallback glfwKeyCallback = new GLFWKeyCallback() {
@@ -91,7 +93,7 @@ public abstract class AbstractRenderer {
             if (w > 0 && h > 0) {
                 width = w;
                 height = h;
-                System.out.println("Windows resize to [" + w + ", " + h + "]");
+//                System.out.println("Windows resize to [" + w + ", " + h + "]");
                 if (textRenderer != null) {
                     textRenderer.resize(width, height);
                 }
