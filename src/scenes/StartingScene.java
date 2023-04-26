@@ -2,7 +2,7 @@ package scenes;
 
 import entity.Building;
 import entity.Bob;
-import entity.Inventory;
+import items.Inventory;
 import gameStuff.Sound;
 import items.Item;
 import lwjglutils.OGLTextRenderer;
@@ -20,27 +20,28 @@ public class StartingScene extends Scene {
     public StartingScene(MapBuilder builder, OGLTextRenderer textRenderer) {
         super(builder, textRenderer);
         sceneID = 1;
+        hasOwnMusic = true;
     }
 
     public void init() {
 
         bgMusic = new Sound("audio/music/welcome.ogg", true);
         mapDesign = new int[][]{
-                {-1,2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 5, 5, 5, 4, 2},
+                {0,2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 5, 5, 5, 4, 2},
                 {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 4, 4, 2},
                 {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 2, 2},
                 {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 2, 2},
                 {4, 4, 4, 4, 4, 4, 3, 3, 4, 4, 4, 4, 5, 5, 4, 2, 2, 2},
                 {2, 2, 2, 2, 3, 3, 3, 3, 2, 2, 2, 4, 5, 5, 4, 2, 2, 2},
-                {-1,-1,-1,2, 3, 3, 2, 2, 2, 2, 2, 4, 5, 5, 4, 2, 2},
-                {-1,-1,-1,-1,3, 3, 2,-1,-1,-1, 2, 4, 5, 5, 4, 2, 2},
-                {-1,-1,-1,-1,-1,3, -1,-1,-1,-1, 2, 4, 5, 5, 4, 2},
-                {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 2, 4, 5, 5, 4, 2},
-                {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 2, 4, 5, 5, 4, 2, 2},
-                {-1,-1,-1,-1,-1,-1,-1,-1,-1, 2, 2, 4, 5, 5, 4, 2, 2},
-                {-1,-1,-1,-1,-1,-1,-1,-1,-1, 2, 2, 4, 5, 5, 4, 2, 2},
-                {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 2, 4, 5, 5, 4, 2},
-                {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 2, 4, 5, 5, 4, 2},
+                {0, 0, 0, 2, 3, 3, 2, 2, 2, 2, 2, 4, 5, 5, 4, 2, 2},
+                {0, 0, 0, 0, 3, 3, 2, 0, 0, 0, 2, 4, 5, 5, 4, 2, 2},
+                {0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 2, 4, 5, 5, 4, 2},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 5, 5, 4, 2},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 5, 5, 4, 2, 2},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 4, 5, 5, 4, 2, 2},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 4, 5, 5, 4, 2, 2},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 5, 5, 4, 2},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 5, 5, 4, 2},
 
 
         };
@@ -51,17 +52,13 @@ public class StartingScene extends Scene {
         voidTex = new VoidTex(playerPos);
         bob = new Bob(playerPos);
 
-        bbShop = new Building(new Position(12, 0),"bb_shop.png", 3);
+        bbShop = new Building(new Position(12, 0),"bb_shop.png", 3, 0);
 
         itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(5, 8)));
         itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(12, 6)));
         itemManager.addItem(new Item(Inventory.ItemType.BAGET,new Position(14, 8)));
 
-        mapChecker.addTeleportPos(new Position(13, 0), 2);
-        mapChecker.addTeleportPos(new Position(0, 1), 9);
-        mapChecker.addTeleportPos(new Position(13, 14), 3);
-        mapChecker.addTeleportPos(new Position(12, 14), 3);
-
+        mapChecker.addTeleportPad(new Position(0, 1), 9);
 
         initMessages();
     }
@@ -75,6 +72,8 @@ public class StartingScene extends Scene {
             if(start) {
                 start = false;
                 Inventory.SHOW_INVENTORY = true;
+                mapChecker.addTeleportPad(new Position(13, 14), 3);
+                mapChecker.addTeleportPad(new Position(12, 14), 3);
                 bgMusic.delete();
                 bgMusic = new Sound("audio/music/challengeAccepted.ogg", true);
                 bgMusic.play();
@@ -86,11 +85,12 @@ public class StartingScene extends Scene {
 
         messageManager.showMessage(playerPos);
 
-        if(messageManager.isLastMessagege() && !added) {
-            System.out.println("LAST MESSAGE");
+        if(messageManager.isLastMessage() && !added) {
             added = true;
             Renderer.questManager.addQuest(new Quest("VITO", "Kup si bagetu", 1));
+            mapChecker.addTeleportPad(new Position(13, 0), 2);
         }
+
     }
 
     private void initMessages() {

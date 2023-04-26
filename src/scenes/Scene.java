@@ -2,7 +2,7 @@ package scenes;
 
 import entity.Bob;
 import entity.Entity;
-import entity.Inventory;
+import items.Inventory;
 import gameStuff.Sound;
 import items.ItemManager;
 import lwjglutils.OGLTextRenderer;
@@ -26,7 +26,7 @@ public abstract class Scene {
     protected MessageManager messageManager;
     public boolean hasFight = false;
     protected Sound bgMusic;
-    protected Sound footstep;
+    public boolean hasOwnMusic = false;
 
     protected ItemManager itemManager;
 
@@ -45,7 +45,6 @@ public abstract class Scene {
         map = new Map(mapDesign);
         mapChecker = new MapChecker(map);
         itemManager = new ItemManager();
-        footstep = new Sound("audio/sounds/footstep.ogg", false, true);
     }
 
     public void render() {
@@ -61,7 +60,6 @@ public abstract class Scene {
 
         if(mapChecker.checkMove(playerPos.getX(), newY)) {
             this.playerPos.y(newY);
-            footstep.play();
         }
     }
 
@@ -70,7 +68,6 @@ public abstract class Scene {
 
         if(mapChecker.checkMove(playerPos.getX(), newY)) {
             this.playerPos.y(newY);
-            footstep.play();
         }
     }
     public void left() {
@@ -78,7 +75,6 @@ public abstract class Scene {
 
         if(mapChecker.checkMove(newX, playerPos.getY())) {
             this.playerPos.x(newX);
-            footstep.play();
         }
     }
     public void right() {
@@ -86,7 +82,6 @@ public abstract class Scene {
 
         if(mapChecker.checkMove(newX, playerPos.getY())) {
             this.playerPos.x(newX);
-            footstep.play();
         }
     }
     public int checkCurrentPos() {
@@ -115,5 +110,14 @@ public abstract class Scene {
         if(bgMusic != null) {
             bgMusic.play();
         }
+    }
+
+    public void setPlayerPos(Position pos) {
+        playerPos = pos;
+        bob.setPosition(pos);
+    }
+
+    public Position getTeleportPos() {
+        return mapChecker.getTeleportTo(playerPos);
     }
 }

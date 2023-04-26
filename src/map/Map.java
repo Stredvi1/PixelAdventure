@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Map {
 
-    public static final int VOID = -1;
-    public static final int WATER = 0;
+    public static final int VOID = 0;
+    public static final int WATER = 7;
     public static final int SAND = 1;
     public static final int GRASS = 2;
     public static final int DIRT = 3;
@@ -26,7 +26,7 @@ public class Map {
             {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 0, 0, 4, 4, 4, 4},
             {0, 0, 1, 4, 2, 2, 4, 4, 4, 0, 0, 0, 4, 4, 4, 4},
             {0, 0, 1, 4, 2, 2, 4, 4, 4, 0, 0, 4, 4, 4, 4, 4},
-            {0, 0, 1, 4, 2, 2, -1, 4, 4, 4, 0, 0, 4, 4, 4, 4},
+            {0, 0, 1, 4, 2, 2, 0, 4, 4, 4, 0, 0, 4, 4, 4, 4},
             {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 0, 0, 4, 4, 4, 4},
             {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 4, 0, 0, 4, 4, 4},
             {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 4, 0, 0, 0, 4, 4},
@@ -36,17 +36,6 @@ public class Map {
             {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4},
 
     };
-
-
-//    private int[][] design = {
-//            {3, 3, 0, 0, 0, 0},
-//            {3, 1, 1, 1, 1, 0},
-//            {0, 2, 1, 1, 1},
-//            {0, 1, 1, 1, 1},
-//            {0, 0, 0, 0,}
-//
-//    };
-
 
     public Map(int[][] design) {
         this.design = design;
@@ -71,7 +60,7 @@ public class Map {
         if (row < this.getHeight() && index < this.getRowLength(row)) {
             return design[row][index];
         }
-        return -1;
+        return VOID;
     }
 
     public int getHeight() {

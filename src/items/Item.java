@@ -1,6 +1,5 @@
 package items;
 
-import entity.Inventory;
 import map.Position;
 
 public class Item {

@@ -1,6 +1,5 @@
 package items;
 
-import entity.Inventory;
 import gameStuff.Sound;
 import lwjglutils.OGLTexture2D;
 import map.MapBuilder;
@@ -28,6 +27,7 @@ public class ItemManager {
         items = new ArrayList<>();
         try {
             baget = new OGLTexture2D("textures/bb.png");
+            glasses = new OGLTexture2D("textures/glasses.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,6 +65,7 @@ public class ItemManager {
                 baget.bind();
                 break;
             case GLASSES:
+                glasses.bind();
                 break;
         }
 

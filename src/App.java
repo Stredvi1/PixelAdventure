@@ -14,6 +14,8 @@ public class App {
     //DONE: Questy + quest show
     //TODO: Dodělat mapy, NPC, budovy
     //TODO: VENTOLIN
+    //TODO: svarta
+    //TODO: underthewater
 
     //Hele jakoby je neděle, pokud kvůli tomu nechci skončit ve cvokhausu,
     // tak bych se na to měl asi vykašlat a zjednodušit to. 

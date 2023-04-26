@@ -1,5 +1,6 @@
 package quests;
 
+import gameStuff.Sound;
 import lwjglutils.OGLTextRenderer;
 import map.MapBuilder;
 import map.Position;
@@ -32,9 +33,12 @@ public class QuestManager {
 
     private float letterSize = 15;
 
+    private Sound finished;
+
     public QuestManager(OGLTextRenderer textRenderer) {
         this.textRenderer = textRenderer;
         this.quests = new ArrayList<>();
+        finished = new Sound("audio/sounds/finished.ogg", false);
     }
 
     public void toggle() {
@@ -56,6 +60,7 @@ public class QuestManager {
         }
         if (questToRemove != null) {
             quests.remove(questToRemove);
+            finished.play();
         } else {
             assert false : "Quest s ID " + questID + " neexistuje";
         }
@@ -154,8 +159,13 @@ public class QuestManager {
         spacing = height / 10;
     }
 
-    public void AddedRequest() {
-        addedRequest = true;
+    public boolean hasQuest(int questID) {
+        for(Quest q : quests) {
+            if(q.getID() == questID){
+                return true;
+            }
+        }
+        return false;
     }
 
 

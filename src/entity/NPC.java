@@ -22,7 +22,9 @@ public class NPC extends Entity{
         return name;
     }
 
-
+    public void setTexture(String textureName) {
+        init(textureName);
+    }
 
 
 }

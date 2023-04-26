@@ -14,13 +14,15 @@ public class BBShopScene extends Scene{
     private NPC bbMaestro;
     private boolean firstRender = true;
     private Building bbOrders;
+    private Position maestroPos;
 
     private boolean added = false;
+    private boolean addedMatrace = false;
 
     public BBShopScene(MapBuilder builder, OGLTextRenderer textRenderer) {
         super(builder, textRenderer);
         sceneID = 2;
-
+        hasOwnMusic = true;
     }
 
     @Override
@@ -29,12 +31,12 @@ public class BBShopScene extends Scene{
         bgMusic = new Sound("audio/music/bageterka.ogg", true);
 
         mapDesign = new int[][] {
-                {-1,-1,-1, 6, 6, 6,-1,-1,-1},
-                {-1,-1, 6, 6, 6, 6, 6,-1,-1},
-                {-1,-1, 6, 6, 6, 6, 6,-1,-1},
-                {-1,-1, 6, 6, 6, 6, 6,-1,-1},
-                {-1,-1, 6, 6, 6, 6, 6,-1,-1},
-                {-1,-1, 6, 6, 5, 6, 6,-1,-1}
+                {0,0,0,6,6,6,0,0,0},
+                {0,0,6,6,6,6,6,0,0},
+                {0,0,6,6,6,6,6,0,0},
+                {0,0,6,6,6,6,6,0,0},
+                {0,0,6,6,6,6,6,0,0},
+                {0,0,6,6,5,6,6,0,0}
         };
 
         map = new Map(mapDesign);
@@ -44,14 +46,12 @@ public class BBShopScene extends Scene{
         playerPos = new Position(4, 5);
         bob = new Bob(playerPos);
 
-        Position maestroPos = new Position(4,0);
+        maestroPos = new Position(4,0);
 
         bbMaestro = new NPC(maestroPos, "BB Maestro", "bb_maestro.png");
         voidTex = new VoidTex(playerPos, "textures/void.png");
 
-        bbOrders = new Building(new Position(3, 1), "bb_orders.png", 3);
-
-        mapChecker.addTeleportPos(new Position(4, 5), 1);
+        bbOrders = new Building(new Position(3, 1), "bb_orders.png", 3, 2f);
 
         initMessages(maestroPos);
     }
@@ -91,8 +91,22 @@ public class BBShopScene extends Scene{
         messageManager.showMessage(playerPos);
 
 
-        if(messageManager.isLastMessagege() && !added) {
+        if(Renderer.questManager.hasQuest(4) &&!addedMatrace) {
+            addedMatrace = true;
+            mapChecker.addTeleportPad(new Position(4, 0), 5);
+            messageManager.addBobMessage("Nemáte náhodou ve skladu matraci?", maestroPos);
+            messageManager.addMessage(bbMaestro.getName(), "Já už myslel, že jseš s receptem.", maestroPos);
+            messageManager.addMessage(bbMaestro.getName(), "Jedna tam bude, na který spěj brigádníci.", maestroPos);
+            messageManager.addMessage(bbMaestro.getName(), "Jen ji musíš najít ve skladu", maestroPos);
+            messageManager.addBobMessage("Aaa ten bych našel kde přesně?", maestroPos);
+            messageManager.addMessage(bbMaestro.getName(), "Stačí projít dveřmi za mnou.", maestroPos);
+            messageManager.addMessage(bbMaestro.getName(), "Ale neztrať se tam!", maestroPos);
+        }
+
+
+        if(messageManager.isLastMessage() && !added) {
             added = true;
+            mapChecker.addTeleportPad(new Position(4, 5), 1);
             Renderer.questManager.addQuest(new Quest("BB Maestro", "Získej zpět tajný recept", 2));
         }
     }

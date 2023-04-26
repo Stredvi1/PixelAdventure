@@ -1,10 +1,10 @@
 package render;
 
-import entity.*;
+import gameStuff.Sound;
+import items.Inventory;
 import map.*;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
-import quests.Quest;
 import quests.QuestManager;
 import scenes.*;
 import window.Window;
@@ -29,7 +29,8 @@ public class Renderer extends AbstractRenderer {
 
     private MapBuilder mapBuilder;
 
-    private Scene ACTIVE, starting, bbShop, lostGranny, bossFight;
+    public static Scene ACTIVE;
+    private Scene starting, bbShop, lostGranny, svarta, basement, bossFight;
     private ArrayList<Scene> scenes;
 
     public Inventory inventory;
@@ -38,6 +39,13 @@ public class Renderer extends AbstractRenderer {
     public static Color mainColor = new Color(0xe4ad00);
 
     private double initScaleText = 1.5;
+
+    protected Sound footstep;
+
+    public static final int normalCameraHeight = 50;
+    private static int cameraHeight = normalCameraHeight;
+
+
 
     public Renderer() {
         super();
@@ -81,6 +89,8 @@ public class Renderer extends AbstractRenderer {
                             questManager.toggle();
                             break;
                     }
+                    footstep.play();
+
                     teleportID = ACTIVE.checkCurrentPos();
                     if (teleportID != 0 && teleportID != ACTIVE.getSceneID()) {
                         updateActiveScene(teleportID);
@@ -90,6 +100,9 @@ public class Renderer extends AbstractRenderer {
         };
     }
 
+    public static void setCameraHeight(int height) {
+        cameraHeight = height;
+    }
 
 
     @Override
@@ -109,6 +122,7 @@ public class Renderer extends AbstractRenderer {
         glLineWidth(4);
 
         textRenderer.setScale(initScaleText);
+        footstep = new Sound("audio/sounds/footstep.ogg", false, true);
 
 
         mapBuilder = new MapBuilder();
@@ -118,10 +132,12 @@ public class Renderer extends AbstractRenderer {
         starting = new StartingScene(mapBuilder, textRenderer);
         bbShop = new BBShopScene(mapBuilder, textRenderer);
         lostGranny = new LostGrandmaScene(mapBuilder, textRenderer);
+        svarta = new SvartaScene(mapBuilder, textRenderer);
+        basement = new BBShopBasementScene(mapBuilder, textRenderer);
         bossFight = new BossFightScene(mapBuilder,textRenderer);
 
         scenes = new ArrayList<>();
-        scenes.addAll(Arrays.asList(starting, bbShop, lostGranny, bossFight));
+        scenes.addAll(Arrays.asList(starting, bbShop, lostGranny, svarta, basement, bossFight));
 
 
         ACTIVE = starting;
@@ -154,7 +170,7 @@ public class Renderer extends AbstractRenderer {
         gluPerspective(45, width / (float) height, 0.1f, 100.0f);
 
 
-        gluLookAt(ACTIVE.getPlayerPos().toMap()[0], ACTIVE.getPlayerPos().toMap()[1], 50, ACTIVE.getPlayerPos().toMap()[0], ACTIVE.getPlayerPos().toMap()[1], 0, 0, 1, 0);
+        gluLookAt(ACTIVE.getPlayerPos().toMap()[0], ACTIVE.getPlayerPos().toMap()[1], cameraHeight, ACTIVE.getPlayerPos().toMap()[0], ACTIVE.getPlayerPos().toMap()[1], 0, 0, 1, 0);
 
 
         glMatrixMode(GL_MODELVIEW);
@@ -178,12 +194,21 @@ public class Renderer extends AbstractRenderer {
 
         for(Scene scene : scenes) {
             if(scene.getSceneID() == teleportID) {
-                ACTIVE.stopMusic();
+                Position teleportTo = ACTIVE.getTeleportPos();
+
+                if(scene.hasOwnMusic) {
+                    ACTIVE.stopMusic();
+                }
                 ACTIVE = scene;
                 if(!ACTIVE.isInit) {
                     ACTIVE.init();
                 }
                 ACTIVE.playMusic();
+                setCameraHeight(normalCameraHeight);
+
+                if(teleportTo != null) {
+                    ACTIVE.setPlayerPos(teleportTo);
+                }
             }
         }
     }
@@ -198,6 +223,7 @@ public class Renderer extends AbstractRenderer {
                 if (textRenderer != null) {
                     textRenderer.resize(width, height);
                     questManager.resize(width, height);
+                    inventory.resize();
 
                     if(width >= 3000) {
                         textRenderer.setScale(4);

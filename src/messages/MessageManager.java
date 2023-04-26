@@ -5,7 +5,6 @@ import lwjglutils.OGLTextRenderer;
 import map.MapBuilder;
 import map.Position;
 import render.Renderer;
-import window.Window;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -40,17 +39,24 @@ public class MessageManager {
     }
 
     public void next(Position pos) {
+        if(messages.size() == 0) {
+            return;
+        }
             if (!messages.get(currentIndex).shouldCheckPos()) {
                 show(pos);
+                increaseIndex();
             } else {
                 if (messages.get(currentIndex).getPos().withinRadius(pos, parcelRadius)) {
                     show(pos);
+                    increaseIndex();
                 }
             }
-        increaseIndex();
     }
 
     public void showMessage(Position pos) {
+        if(messages.size() == 0) {
+            return;
+        }
         if (!messages.get(currentIndex).shouldCheckPos()) {
             show(pos);
         } else {
@@ -62,14 +68,17 @@ public class MessageManager {
 
     public void addMessage(String author, String text, Position pos) {
         messages.add(new Message(author, text, pos));
+        addedNew();
     }
 
     public void addBobMessage(String text, Position pos) {
         messages.add(new Message(text, pos));
+        addedNew();
     }
 
     public void addBobMessage(String text) {
         messages.add(new Message(text));
+        addedNew();
     }
 
     private void increaseIndex() {
@@ -114,7 +123,14 @@ public class MessageManager {
         this.parcelRadius = parcelRadius;
     }
 
-    public boolean isLastMessagege() {
+    public boolean isLastMessage() {
         return isLastMessage;
+    }
+
+    private void addedNew() {
+        if(isLastMessage){
+            isLastMessage = false;
+            currentIndex++;
+        }
     }
 }

@@ -1,10 +1,8 @@
 package scenes;
 
 import entity.Bob;
-import entity.Inventory;
+import items.Inventory;
 import entity.NPC;
-import gameStuff.Sound;
-import items.ItemManager;
 import items.Item;
 import lwjglutils.OGLTextRenderer;
 import map.MapBuilder;
@@ -26,17 +24,25 @@ public class LostGrandmaScene extends Scene{
 
     public void init() {
 
-        bgMusic = new Sound("audio/music/challengeAccepted.ogg", true);
-
         mapDesign = new int[][] {
-                {2, 4, 5, 5, 4, 2},
-                {2, 4, 5, 5, 4, 2},
-                {2, 4, 5, 5, 4, 2, -1},
-                {2, 4, 5, 5, 4, 4, 4, 4,4,4},
-                {2, 4, 5, 5, 5, 5, 5, 5,5,5},
-                {2, 4, 5, 5, 5, 5, 5 ,5,5,5},
-                {2, 4, 4, 4, 4, 4, 4 ,4,4,4},
-                {2, 2, 2, 2, 2, 2, 2, 2,2,2}
+                {2,4,5,5,4,2},
+                {2,4,5,5,4,2},
+                {2,4,5,5,4,2,2,2,2,2,2,2,2},
+                {2,4,5,5,4,4,4,4,4,4,4,4,4},
+                {2,4,5,5,5,5,5,5,5,5,5,5,5},
+                {2,4,5,5,5,5,5,5,5,5,5,5,5},
+                {2,4,4,4,4,4,4,4,4,4,4,4,4},
+                {2,2,2,2,3,2,2,2,2,2,2,2,2},
+                {0,0,0,2,2,3,3,2},
+                {},
+                {},
+                {0,0,0,0,0,0,0,1,1,1,1,2,2},
+                {0,0,0,0,0,0,1,1,7,7,7,1,2},
+                {0,0,0,0,0,3,2,2,3,7,7,7,7},
+                {0,0,0,0,0,0,2,2,2,1,1,2,2},
+                {0,0,0,0,0,0,0,0,2,2,2},
+
+
         };
 
         super.init();
@@ -48,9 +54,11 @@ public class LostGrandmaScene extends Scene{
         granny = new NPC(grannyPos, "Stařenka","granny.png");
 
         itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(4, 6)));
+        itemManager.addItem(new Item(Inventory.ItemType.GLASSES, new Position(7, 12)));
 
-        mapChecker.addTeleportPos(new Position(2, 0), 1);
-        mapChecker.addTeleportPos(new Position(3, 0), 1);
+
+        mapChecker.addTeleportPad(new Position(2, 0), 1);
+        mapChecker.addTeleportPad(new Position(3, 0), 1);
 
         initMessages();
     }
@@ -66,9 +74,26 @@ public class LostGrandmaScene extends Scene{
         bob.render();
         messageManager.showMessage(playerPos);
 
-        if(messageManager.isLastMessagege() && !added) {
+        if(messageManager.isLastMessage() && !added) {
             added = true;
             Renderer.questManager.addQuest(new Quest(granny.getName(), "Najdi mi moje brýle", 3));
+            mapChecker.addTeleportPad(new Position(12,4), 4);
+            mapChecker.addTeleportPad(new Position(12,5), 4);
+            mapChecker.addTeleportPad(new Position(12,14), 4,new Position(0,11));
+        }
+
+        if(playerPos.withinRadius(grannyPos, 1) && Inventory.GLASSES > 0) {
+            Inventory.GLASSES = 0;
+            Renderer.questManager.finishQuest(3);
+            granny.setTexture("grannyglasses.png");
+            messageManager.addMessage(granny.getName(), "Moc ti děkuju mladíku!", grannyPos);
+            messageManager.addBobMessage("Maličkost", grannyPos);
+            messageManager.addBobMessage("Mluvila jste o dodávce?", grannyPos);
+            messageManager.addMessage(granny.getName(), "Joo, ten chuligán co tu projel!", grannyPos);
+            messageManager.addBobMessage("Kam jel?", grannyPos);
+            messageManager.addMessage(granny.getName(), "Pokračoval dál touhle cestou.", grannyPos);
+            messageManager.addBobMessage("Díkec, jdu si pro něj.", grannyPos);
+            messageManager.addMessage(granny.getName(), "A dejte mu za mě pěstí!", grannyPos);
         }
     }
 

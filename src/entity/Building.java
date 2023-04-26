@@ -7,10 +7,13 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Building extends Entity{
 
-    public Building(Position leftCornerPos, String textureName, int parcelWidth) {
+    private float setHigher = 0;
+
+    public Building(Position leftCornerPos, String textureName, int parcelWidth, float setHigher) {
         this.pos = leftCornerPos;
         init("Buildings/" + textureName);
         this.size = parcelWidth * MapBuilder.MAP_SIZE + 1;
+        this.setHigher = setHigher;
     }
 
     public void render() {
@@ -21,7 +24,7 @@ public class Building extends Entity{
         glPushMatrix();
         glLoadIdentity();
 
-        glTranslatef(pos.toMap()[0] - 1, pos.toMap()[1] + 3 , 1);
+        glTranslatef(pos.toMap()[0] - 1, pos.toMap()[1] + setHigher, 1);
 
 
         glBegin(GL_QUADS);

@@ -1,16 +1,21 @@
 package map;
 
+import render.Renderer;
+
 import java.util.ArrayList;
 
 public class MapChecker {
 
     private final Map map;
-    private ArrayList<Position> teleport;
+    private ArrayList<Position> teleportPad;
+    private ArrayList<Position> teleportTo;
+
 
 
     public MapChecker(Map map) {
         this.map = map;
-        teleport = new ArrayList<>();
+        teleportPad = new ArrayList<>();
+        teleportTo = new ArrayList<>();
     }
 
     public boolean checkMove(int x, int y) {
@@ -32,7 +37,7 @@ public class MapChecker {
     }
 
     public int checkCurrentPos(Position pos) {
-        for (Position special : teleport) {
+        for (Position special : teleportPad) {
             if (special.equals(pos)) {
                 return special.getID();
             }
@@ -40,8 +45,22 @@ public class MapChecker {
         return 0;
     }
 
-    public void addTeleportPos(Position pos, int sceneID) {
-        teleport.add(new Position(pos, sceneID));
+    public void addTeleportPad(Position pos, int sceneID) {
+        teleportPad.add(new Position(pos, sceneID));
+        teleportTo.add(null);
     }
 
+    public void addTeleportPad(Position pos, int sceneID, Position teleportTo) {
+        teleportPad.add(new Position(pos, sceneID));
+        this.teleportTo.add(new Position(teleportTo, sceneID));
+    }
+
+    public Position getTeleportTo(Position playerPos) {
+        for(int i = 0; i < teleportPad.size(); i++) {
+            if(teleportPad.get(i).equals(playerPos)) {
+                return teleportTo.get(i);
+            }
+        }
+        return null;
+    }
 }
