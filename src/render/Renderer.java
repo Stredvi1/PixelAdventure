@@ -30,7 +30,7 @@ public class Renderer extends AbstractRenderer {
     private MapBuilder mapBuilder;
 
     public static Scene ACTIVE;
-    private Scene starting, bbShop, lostGranny, svarta, basement, bossFight;
+    private Scene starting, bbShop, lostGranny, svarta, basement, ventolin, bossFight;
     private ArrayList<Scene> scenes;
 
     public Inventory inventory;
@@ -134,13 +134,15 @@ public class Renderer extends AbstractRenderer {
         lostGranny = new LostGrandmaScene(mapBuilder, textRenderer);
         svarta = new SvartaScene(mapBuilder, textRenderer);
         basement = new BBShopBasementScene(mapBuilder, textRenderer);
+        ventolin = new VentolinScene(mapBuilder,textRenderer);
         bossFight = new BossFightScene(mapBuilder,textRenderer);
 
+
         scenes = new ArrayList<>();
-        scenes.addAll(Arrays.asList(starting, bbShop, lostGranny, svarta, basement, bossFight));
+        scenes.addAll(Arrays.asList(starting, bbShop, lostGranny, svarta, basement, ventolin, bossFight));
 
 
-        ACTIVE = starting;
+        ACTIVE = ventolin;
         ACTIVE.init();
         ACTIVE.playMusic();
 

@@ -79,7 +79,7 @@ public class SvartaScene extends Scene{
 
         if(startCounter) {
             if (counter <= 200) {
-                counter++;
+                counter += 5;
             }
             if(counter == 100) {
                 svartaPos = new Position(svartaPos.getX(), svartaPos.getY() + 1);
@@ -87,8 +87,8 @@ public class SvartaScene extends Scene{
             }else if (counter == 200) {
                 svartaPos = new Position(svartaPos.getX(), svartaPos.getY() + 1);
                 svarta.setPosition(svartaPos);
-                messageManager.addMessage(svarta.getName(), "Tak kámo, to bylo HODNĚ vysoko!", svartaPos);
-                messageManager.addBobMessage("Není za co, Svarta!", svartaPos);
+                messageManager.addMessage(svarta.getName(), "Tak kámo, to byla vejška jako PRASE!", svartaPos);
+                messageManager.addBobMessage("Není ti nic?", svartaPos);
             }
         }
 
