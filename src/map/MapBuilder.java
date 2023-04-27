@@ -8,7 +8,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class MapBuilder {
 
-    private OGLTexture2D water, grass, dirt, stone, sand, asphalt, tile, wood;
+    private OGLTexture2D water, grass, dirt, stone, sand, asphalt, tile, wood, disco;
     private Map map;
     public static int MAP_SIZE = 5;
 
@@ -32,6 +32,7 @@ public class MapBuilder {
             asphalt = new OGLTexture2D("textures/asphalt.png");
             tile = new OGLTexture2D("textures/tile.png");
             wood = new OGLTexture2D("textures/wood.png");
+            disco = new OGLTexture2D("textures/disco.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,6 +57,7 @@ public class MapBuilder {
                     case Map.ASPHALT -> asphalt.bind();
                     case Map.TILE -> tile.bind();
                     case Map.WOOD -> wood.bind();
+                    case Map.DISCO -> disco.bind();
 
                     case Map.VOID -> {
                         continue;

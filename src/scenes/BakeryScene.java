@@ -1,6 +1,7 @@
 package scenes;
 
 import entity.Bob;
+import entity.Building;
 import entity.NPC;
 import gameStuff.Sound;
 import items.Inventory;
@@ -9,11 +10,13 @@ import lwjglutils.OGLTextRenderer;
 import map.MapBuilder;
 import map.Position;
 import map.VoidTex;
+import org.lwjgl.system.CallbackI;
 import quests.Quest;
 import render.Renderer;
 
 public class BakeryScene extends Scene{
 
+    private Building bakery;
     private boolean added = false;
 
     public BakeryScene(MapBuilder builder, OGLTextRenderer textRenderer) {
@@ -25,38 +28,39 @@ public class BakeryScene extends Scene{
     public void init() {
 
         mapDesign = new int[][] {
-                {0,0,0,0,0,0,0,0,0,0,0,0,2,3,2,0,0,0,},
-                {0,0,0,0,0,0,0,0,0,0,0,3,2,2,2,2,0,0,},
-                {0,0,0,2,4,4,2,2,2,2,2,2,2,2,4,2,2,0,},
-                {0,2,2,2,2,4,2,2,2,2,4,2,2,4,2,2,2,0,},
-                {2,2,3,2,4,2,4,3,2,4,1,2,2,3,2,2,2,4,},
-                {4,2,2,2,4,2,1,2,2,2,2,2,2,4,2,2,2,1,},
-                {0,2,4,2,2,2,2,1,2,7,2,2,2,4,2,4,4,0,},
-                {0,0,4,4,2,2,2,2,2,2,2,2,2,2,1,2,0,0,},
-                {0,0,0,0,2,2,2,1,2,2,2,2,2,2,0,0,0,0,}
+                {0,0,0,0,0,0,0,0,0,0,0,0,4,5,4,0,0,0,},
+                {0,0,0,0,0,0,0,0,0,0,0,3,2,5,2,2,0,0,},
+                {0,0,0,4,5,5,5,4,2,3,2,3,2,2,3,2,2,0,},
+                {0,2,2,4,5,5,5,4,3,2,3,2,3,3,2,2,2,0,},
+                {2,2,2,4,4,4,4,4,3,3,3,2,2,3,2,2,2,3,},
+                {7,2,2,2,3,2,3,2,2,3,2,2,2,2,2,2,2,3,},
+                {0,7,7,2,2,2,2,3,2,0,2,2,2,3,2,3,3,0,},
+                {0,0,7,7,7,7,7,7,0,0,0,2,2,2,3,2,0,0,},
+                {0,0,0,0,7,7,7,0,0,2,2,2,2,2,0,0,0,0,}
 
         };
 
         super.init();
 
-        playerPos = new Position(12,0);
+        playerPos = new Position(13,0);
         voidTex = new VoidTex(playerPos, map.getHighestWidth(), map.getHeight());
         bob = new Bob(playerPos);
 
-        itemManager.addItem(new Item(Inventory.ItemType.ROLL, new Position(17,0)));
-        itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(4,9)));
-        itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(17,15)));
+        bakery = new Building(new Position(4,2), "bakery.png", 3, 0.5f);
+
+        itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(16,6)));
+
+        mapChecker.addTeleportPad(new Position(5,2), 8);
+        mapChecker.addTeleportPad(new Position(13,0), 6);
 
     }
 
     public void render() {
         voidTex.render();
         mapBuilder.renderMap(map);
+        bakery.render();
         bob.render();
         itemManager.renderItems(playerPos);
-
-
-
     }
 
 }

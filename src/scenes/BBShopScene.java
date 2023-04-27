@@ -95,7 +95,7 @@ public class BBShopScene extends Scene{
             addedMatrace = true;
             mapChecker.addTeleportPad(new Position(4, 0), 5);
             messageManager.addBobMessage("Nemáte náhodou ve skladu matraci?", maestroPos);
-            messageManager.addMessage(bbMaestro.getName(), "Já už myslel, že jseš s receptem.", maestroPos);
+            messageManager.addMessage(bbMaestro.getName(), "Já už myslel, že jdeš s receptem.", maestroPos);
             messageManager.addMessage(bbMaestro.getName(), "Jedna tam bude, na který spěj brigádníci.", maestroPos);
             messageManager.addMessage(bbMaestro.getName(), "Jen ji musíš najít ve skladu", maestroPos);
             messageManager.addBobMessage("Aaa ten bych našel kde přesně?", maestroPos);

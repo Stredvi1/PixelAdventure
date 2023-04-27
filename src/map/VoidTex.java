@@ -9,6 +9,7 @@ public class VoidTex {
     private Position pos;
     private OGLTexture2D texture;
     private int width, height;
+    private int mapWidth, mapHeight;
 
 
     public VoidTex(Position pos, int mapWidth, int mapHeight) {
@@ -18,6 +19,8 @@ public class VoidTex {
     public VoidTex(Position pos, String fileName, int mapWidth, int mapHeight) {
         this.pos = pos;
 
+        this.mapWidth = mapWidth;
+        this.mapHeight = mapHeight;
         width = mapWidth * 2 * MapBuilder.MAP_SIZE;
         height = mapHeight * 2 * MapBuilder.MAP_SIZE;
         init(fileName);
@@ -48,13 +51,21 @@ public class VoidTex {
         glLoadIdentity();
 
 
-//        glTranslatef(pos.toMap()[0], pos.toMap()[1], -20);
-        glTranslatef(40 + pos.toMap()[0] / 10, -pos.toMap()[1] / 10 - 40, 0);
+
+        if(mapWidth < 10) {
+            mapWidth = 6;
+        }
+
+        glTranslatef(mapWidth * 2 + pos.toMap()[0] / 10, -pos.toMap()[1] / 10 - mapWidth * 2, 0);
 
 
         glBegin(GL_QUADS);
-
-        int x = width / 2;
+        int x;
+        if( mapWidth < 10) {
+            x = width;
+        } else {
+            x = width / 2;
+        }
 
         glTexCoord2f(-1, -1);
         glVertex2f(-x, -x);

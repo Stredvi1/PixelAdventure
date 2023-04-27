@@ -107,7 +107,8 @@ public class Sound {
 
     public void stop() {
         if (isPlaying) {
-            alSourceStop(sourceId);
+            alSourcePause(sourceId);
+//            alSourceStop(sourceId);
             isPlaying = false;
         }
     }

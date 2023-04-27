@@ -60,7 +60,6 @@ public class QuestManager {
         }
         if (questToRemove != null) {
             quests.remove(questToRemove);
-            System.out.println("FINISHED QUEST");
             finished.play();
         } else {
             assert false : "Quest s ID " + questID + " neexistuje";

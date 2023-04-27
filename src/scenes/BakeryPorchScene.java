@@ -6,6 +6,7 @@ import entity.NPC;
 import gameStuff.DamageBar;
 import gameStuff.Sound;
 import items.Inventory;
+import items.Item;
 import lwjglutils.OGLTextRenderer;
 import map.Map;
 import map.MapBuilder;
@@ -23,6 +24,7 @@ public class BakeryPorchScene extends Scene{
     private boolean added = false;
     private boolean startFight = false;
     private boolean finished = false;
+    private boolean dumpling = false;
 
     public BakeryPorchScene(MapBuilder builder, OGLTextRenderer textRenderer) {
         super(builder, textRenderer);
@@ -52,7 +54,7 @@ public class BakeryPorchScene extends Scene{
         playerPos = new Position(7, 5);
         bob = new Bob(playerPos);
 
-        snejksPos = new Position(6,3);
+        snejksPos = new Position(6,2);
 
         snejks = new NPC(snejksPos, "Snejks", "snejks.png");
         voidTex = new VoidTex(playerPos, map.getHighestWidth(), map.getHeight());
@@ -64,7 +66,7 @@ public class BakeryPorchScene extends Scene{
 
     private void initMessages() {
         messageManager.addBobMessage("HEJ, pomalu Snejksi, pomalu!", snejksPos);
-        messageManager.addMessage(snejks.getName(), "Jsem otevřel tajmenou komnatu!", snejksPos);
+        messageManager.addMessage(snejks.getName(), "Jsem otevřel tajemnou komnatu!", snejksPos);
     }
 
     public void render() {
@@ -76,6 +78,8 @@ public class BakeryPorchScene extends Scene{
         }
         hut.render();
         bob.render();
+
+        itemManager.renderItems(playerPos);
 
         if(startFight && playerPos.withinRadius(snejksPos, 1)) {
             bar.renderDamageBar(playerPos);
@@ -100,6 +104,15 @@ public class BakeryPorchScene extends Scene{
             bgMusic.play();
             Renderer.questManager.finishQuest(6);
             mapChecker.addTeleportPad(new Position(7,5), 8);
+            itemManager.addItem(new Item(Inventory.ItemType.MAGIC_WAND, snejksPos));
+        }
+
+        if(Renderer.questManager.hasQuest(7) && !dumpling) {
+            dumpling = true;
+            itemManager.addItem(new Item(Inventory.ItemType.DUMPLING, new Position(0,0)));
+            itemManager.addItem(new Item(Inventory.ItemType.DUMPLING, new Position(5,0)));
+            itemManager.addItem(new Item(Inventory.ItemType.DUMPLING, new Position(4,3)));
+            itemManager.addItem(new Item(Inventory.ItemType.DUMPLING, new Position(8,2)));
         }
     }
 

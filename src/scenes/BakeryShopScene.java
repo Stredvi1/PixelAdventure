@@ -11,6 +11,7 @@ import map.Map;
 import map.MapBuilder;
 import map.Position;
 import map.VoidTex;
+import org.lwjgl.system.CallbackI;
 import quests.Quest;
 import render.Renderer;
 
@@ -23,6 +24,9 @@ public class BakeryShopScene extends Scene{
     private boolean added = false;
     private boolean addCake = false;
     private boolean addMessages = false;
+    private boolean bread = false;
+    private boolean itemBread = false;
+
 
 
     public BakeryShopScene(MapBuilder builder, OGLTextRenderer textRenderer) {
@@ -107,6 +111,23 @@ public class BakeryShopScene extends Scene{
         if (!Renderer.questManager.hasQuest(6) && messageManager.isLastMessage() && !addCake) {
             addCake = true;
             itemManager.addItem(new Item(Inventory.ItemType.CAKE, new Position(2,1)));
+        }
+
+        if(Renderer.questManager.hasQuest(7) && !bread) {
+            bread = true;
+            messageManager.addMessage(baker.getName(), "Zdravím", bakerPos);
+            messageManager.addBobMessage("Máte tu chleba a knedlíky prosím?", bakerPos);
+            messageManager.addMessage(baker.getName(), "Díky vaší pomoci už jo, koukejte, dám vám ho...", bakerPos);
+            messageManager.addMessage(baker.getName(), "za to žeee....", bakerPos);
+            messageManager.addMessage(baker.getName(), "....", bakerPos);
+            messageManager.addMessage(baker.getName(), "jste mi pomohl :).", bakerPos);
+        }
+
+        if(Renderer.questManager.hasQuest(7) && messageManager.isLastMessage() && !itemBread) {
+            itemBread = true;
+            itemManager.addItem(new Item(Inventory.ItemType.BREAD, new Position(2,1)));
+            messageManager.addMessage(baker.getName(), "A knedlíky jsou vzadu u slepic", bakerPos);
+            messageManager.addMessage(baker.getName(), "Neptejte se proč...", bakerPos);
         }
 
     }

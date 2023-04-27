@@ -14,7 +14,7 @@ public class BossFightScene extends Scene{
 
     public BossFightScene(MapBuilder builder, OGLTextRenderer textRenderer) {
         super(builder, textRenderer);
-        sceneID = 9;
+        sceneID = 99;
         hasFight = true;
         hasOwnMusic = true;
         bar = new DamageBar(textRenderer);

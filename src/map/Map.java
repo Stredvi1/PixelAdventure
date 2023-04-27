@@ -13,6 +13,7 @@ public class Map {
     public static final int ASPHALT = 5;
     public static final int TILE = 6;
     public static final int WOOD = 8;
+    public static final int DISCO = 9;
 
 
 

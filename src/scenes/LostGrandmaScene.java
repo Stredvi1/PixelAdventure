@@ -16,6 +16,9 @@ public class LostGrandmaScene extends Scene{
     private NPC granny;
     private Position grannyPos = new Position(3, 6);
     private boolean added = false;
+    private boolean goulash = false;
+    private boolean itemGoulash = false;
+
 
     public LostGrandmaScene(MapBuilder builder, OGLTextRenderer textRenderer) {
         super(builder, textRenderer);
@@ -94,6 +97,18 @@ public class LostGrandmaScene extends Scene{
             messageManager.addMessage(granny.getName(), "Pokračoval dál touhle cestou.", grannyPos);
             messageManager.addBobMessage("Díkec, jdu si pro něj.", grannyPos);
             messageManager.addMessage(granny.getName(), "A dejte mu za mě pěstí!", grannyPos);
+        }
+
+        if(Renderer.questManager.hasQuest(7) && !goulash) {
+            goulash = true;
+            messageManager.addMessage(granny.getName(), "Copak ty tu zase?", grannyPos);
+            messageManager.addBobMessage("Byl jsem za vámi vyslán, že máte dobrý segedín", grannyPos);
+            messageManager.addMessage(granny.getName(), "Jojo mládenče, ten nejlepší! Tumáš.", grannyPos);
+        }
+
+        if (goulash && messageManager.isLastMessage() && !itemGoulash) {
+            itemGoulash = true;
+            itemManager.addItem(new Item(Inventory.ItemType.GOULASH, new Position(2,6)));
         }
     }
 

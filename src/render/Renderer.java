@@ -30,8 +30,8 @@ public class Renderer extends AbstractRenderer {
     private MapBuilder mapBuilder;
 
     public static Scene ACTIVE;
-    private Scene starting, bbShop, lostGranny, svarta, basement, ventolin, bakery, bakeryStore, bakeryPorch, bossFight;
-    private ArrayList<Scene> scenes;
+    private Scene starting, bbShop, lostGranny, svarta, basement, ventolin, bakery, bakeryStore, bakeryPorch, dumpling, bossFight;
+    private static ArrayList<Scene> scenes;
 
     public Inventory inventory;
     public static QuestManager questManager;
@@ -43,9 +43,11 @@ public class Renderer extends AbstractRenderer {
     protected Sound footstep;
 
     public static int AllBagetCount = 0;
+    public static int AllRollCount = 0;
+    public static int AllDumplingCount = 0;
+
     public static final int normalCameraHeight = 50;
     private static int cameraHeight = normalCameraHeight;
-
 
 
     public Renderer() {
@@ -87,7 +89,7 @@ public class Renderer extends AbstractRenderer {
                             }
                             break;
                         case GLFW_KEY_M:
-                            if(ACTIVE.hasFight) {
+                            if (ACTIVE.hasFight) {
                                 ACTIVE.heal();
                             }
                             break;
@@ -111,6 +113,8 @@ public class Renderer extends AbstractRenderer {
     public static void setCameraHeight(int height) {
         cameraHeight = height;
     }
+
+
 
 
     @Override
@@ -142,19 +146,20 @@ public class Renderer extends AbstractRenderer {
         lostGranny = new LostGrandmaScene(mapBuilder, textRenderer);
         svarta = new SvartaScene(mapBuilder, textRenderer);
         basement = new BBShopBasementScene(mapBuilder, textRenderer);
-        ventolin = new VentolinScene(mapBuilder,textRenderer);
+        ventolin = new VentolinScene(mapBuilder, textRenderer);
         bakery = new BakeryScene(mapBuilder, textRenderer);
         bakeryStore = new BakeryShopScene(mapBuilder, textRenderer);
         bakeryPorch = new BakeryPorchScene(mapBuilder, textRenderer);
+        dumpling = new DumplingScene(mapBuilder, textRenderer);
 
-        bossFight = new BossFightScene(mapBuilder,textRenderer);
+        bossFight = new BossFightScene(mapBuilder, textRenderer);
 
 
         scenes = new ArrayList<>();
-        scenes.addAll(Arrays.asList(starting, bbShop, lostGranny, svarta, basement, ventolin, bakery, bakeryStore, bakeryPorch, bossFight));
+        scenes.addAll(Arrays.asList(starting, bbShop, lostGranny, svarta, basement, ventolin, bakery, bakeryStore, bakeryPorch, dumpling, bossFight));
 
 
-        ACTIVE = ventolin;
+        ACTIVE = starting;
         ACTIVE.init();
         ACTIVE.playMusic();
 
@@ -169,7 +174,6 @@ public class Renderer extends AbstractRenderer {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
 
 
     }
@@ -208,25 +212,31 @@ public class Renderer extends AbstractRenderer {
 
     private void updateActiveScene(int teleportID) {
 
-        for(Scene scene : scenes) {
-            if(scene.getSceneID() == teleportID) {
+        for (Scene scene : scenes) {
+            if (scene.getSceneID() == teleportID) {
                 Position teleportTo = ACTIVE.getTeleportPos();
-                if(scene.hasOwnMusic) {
+                if (scene.hasOwnMusic) {
                     for (Scene s : scenes) {
                         s.stopMusic();
                     }
                 }
                 ACTIVE = scene;
-                if(!ACTIVE.isInit) {
+                if (!ACTIVE.isInit) {
                     ACTIVE.init();
                 }
                 ACTIVE.playMusic();
                 setCameraHeight(normalCameraHeight);
 
-                if(teleportTo != null) {
+                if (teleportTo != null) {
                     ACTIVE.setPlayerPos(teleportTo);
                 }
             }
+        }
+    }
+
+    public static void stopAllMusic() {
+        for(Scene s : scenes) {
+            s.stopMusic();
         }
     }
 
@@ -242,7 +252,7 @@ public class Renderer extends AbstractRenderer {
                     questManager.resize(width, height);
                     inventory.resize();
 
-                    if(width >= 3000) {
+                    if (width >= 3000) {
                         textRenderer.setScale(4);
                         glLineWidth(12);
                     } else if (width >= 1000) {

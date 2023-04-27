@@ -44,7 +44,7 @@ public class Inventory {
             textRenderer.addStr2D(startingPixel, (move += spacing), "Matrace: " + MATRACE);
         }
         if(ROLL != 0) {
-            textRenderer.addStr2D(startingPixel, (move += spacing), "Rohlíky: " + ROLL);
+            textRenderer.addStr2D(startingPixel, (move += spacing), "Rohlíky: " + ROLL + "/" + Renderer.AllRollCount);
         }
         if(BREAD != 0) {
             textRenderer.addStr2D(startingPixel, (move += spacing), "Chleba: " + BREAD);
@@ -53,7 +53,7 @@ public class Inventory {
             textRenderer.addStr2D(startingPixel, (move += spacing), "Guláš: " + GOULASH);
         }
         if(DUMPLING != 0) {
-            textRenderer.addStr2D(startingPixel, (move += spacing), "Knedlíky: " + DUMPLING);
+            textRenderer.addStr2D(startingPixel, (move += spacing), "Knedlíky: " + DUMPLING + "/" + Renderer.AllDumplingCount);
         }
         if(CAKE != 0) {
             textRenderer.addStr2D(startingPixel, (move += spacing), "Bábovka: " + CAKE);

@@ -9,6 +9,7 @@ import lwjglutils.OGLTextRenderer;
 import map.MapBuilder;
 import map.Position;
 import map.VoidTex;
+import org.lwjgl.system.CallbackI;
 import quests.Quest;
 import render.Renderer;
 
@@ -20,6 +21,10 @@ public class VentolinScene extends Scene{
     private Sound tmp;
     private boolean isDiscoScience = false;
     private boolean initDisco = false;
+    private boolean momCalled = false;
+    private boolean addedPos = false;
+    private Position telPos;
+    private Sound ring;
 
 
     public VentolinScene(MapBuilder builder, OGLTextRenderer textRenderer) {
@@ -30,7 +35,9 @@ public class VentolinScene extends Scene{
 
     @Override
     public void init() {
+
         bgMusic = new Sound("audio/music/ventomech.ogg", true);
+        ring = new Sound("audio/sounds/ring.ogg", false);
 
         mapDesign = new int[][] {
                 {4,3,2,2,2,3,2,4,2,2,0,0,0,0,0,1,1,1,7,0,0,},
@@ -40,16 +47,16 @@ public class VentolinScene extends Scene{
                 {0,0,0,0,0,4,2,2,3,2,3,2,2,2,2,2,2,1,1,1,0,},
                 {0,0,0,0,0,2,2,2,3,3,2,2,2,3,2,2,2,2,2,1,1,},
                 {0,0,0,0,0,2,2,2,2,3,4,4,4,4,2,2,2,2,2,4,4,},
-                {0,0,0,0,2,2,4,2,2,3,6,6,6,4,2,2,4,4,2,2,4,},
-                {0,0,0,0,2,2,2,2,2,4,6,6,6,3,3,2,2,3,2,2,2,},
-                {0,0,0,2,2,3,2,2,4,4,6,6,6,4,2,3,3,2,2,4,4,},
+                {0,0,0,0,2,2,4,2,2,3,9,9,9,4,2,2,4,4,2,4,4,4,4,},
+                {0,0,0,0,2,2,2,2,2,4,9,9,9,3,3,2,2,3,2,2,5,5,5,5},
+                {0,0,0,2,2,3,2,2,4,4,9,9,9,4,2,3,3,2,2,4,4,4,4,},
                 {0,0,0,2,2,2,2,2,2,4,4,4,4,4,2,4,2,2,2,3,4,},
                 {0,0,0,2,2,2,2,2,4,3,2,3,2,2,2,2,4,2,2,2,2,},
                 {0,0,0,0,2,2,2,2,2,2,2,4,2,2,2,2,2,2,2,2,0,},
                 {0,0,0,0,0,3,2,2,2,2,2,3,3,2,2,2,2,2,4,2,0,},
                 {0,0,0,0,0,0,2,4,3,2,2,2,3,2,2,4,2,4,2,0,0,},
-                {0,0,0,0,0,0,0,0,2,2,2,2,2,3,2,2,2,2,0,0,0,},
-                {0,0,0,0,0,0,0,0,0,0,0,0,2,4,4,2,4,0,0,0,0,},
+                {0,0,0,0,0,0,0,0,0,2,2,2,2,4,4,5,4,4,0,0,0,},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,5,4,0,0,0,0,},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,5,4,0,0,0,0,}
 
         };
@@ -69,6 +76,8 @@ public class VentolinScene extends Scene{
 
         mapChecker.addTeleportPad(new Position(2,1), 4);
 
+        telPos = new Position(23,8);
+
         initMessages();
     }
 
@@ -79,8 +88,10 @@ public class VentolinScene extends Scene{
         bob.render();
         itemManager.renderItems(playerPos);
 
-        messageManager.showMessage(playerPos);
+        if(!ring.isPlaying()) {
+            messageManager.showMessage(playerPos);
 
+        }
         if (messageManager.isLastMessage() && !added) {
             added = true;
             Renderer.questManager.addQuest(new Quest(ventolin.getName(), "Sežeň mi bábovku", 5));
@@ -90,6 +101,8 @@ public class VentolinScene extends Scene{
         if (playerPos.withinRadius(ventolinPos, 1) && Inventory.CAKE == 1) {
             messageManager.addMessage(ventolin.getName(), "Tak tohle byla ta nejlepší bábovka co jsem kdy měl!", ventolinPos);
             messageManager.addMessage(ventolin.getName(), "Tahle písnička je pro tebe!", ventolinPos);
+            messageManager.addMessage(ventolin.getName(), "BTW dodávka jela dál doleva :)", ventolinPos);
+
             Inventory.CAKE = 0;
             Renderer.questManager.finishQuest(5);
             isDiscoScience = true;
@@ -109,6 +122,21 @@ public class VentolinScene extends Scene{
             bgMusic.delete();
             bgMusic = tmp;
             bgMusic.play();
+
+        }
+
+        if(playerPos.equals(telPos) && initDisco && !momCalled) {
+            momCalled = true;
+            ring.play();
+            messageManager.addMessage("Mamka", "Kde proboha lítáš?", playerPos);
+            messageManager.addBobMessage("Musím zachránit bageterku!");
+            messageManager.addMessage("Mamka", "Ty jsi zase hulil, nebo o čem to meleš?", playerPos);
+            messageManager.addBobMessage("Všechno ti doma řeknu prosimtě...");
+        }
+
+        if(momCalled && !ring.isPlaying() && messageManager.isLastMessage() && !addedPos) {
+            addedPos = true;
+            mapChecker.addTeleportPad(telPos, 10);
         }
     }
 

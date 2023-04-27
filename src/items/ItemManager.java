@@ -69,8 +69,10 @@ public class ItemManager {
     }
 
     public void addItem(Item item) {
-        if(item.getType() == ItemType.BAGET) {
-            Renderer.AllBagetCount++;
+        switch (item.getType()) {
+            case BAGET -> Renderer.AllBagetCount++;
+            case ROLL -> Renderer.AllRollCount++;
+            case DUMPLING -> Renderer.AllDumplingCount++;
         }
         items.add(item);
     }
