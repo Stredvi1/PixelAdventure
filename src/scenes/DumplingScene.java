@@ -63,6 +63,7 @@ public class DumplingScene extends Scene{
     public void render() {
         voidTex.render();
         mapBuilder.renderMap(map);
+        mapChecker.renderTeleports();
         guy.render();
         bob.render();
 

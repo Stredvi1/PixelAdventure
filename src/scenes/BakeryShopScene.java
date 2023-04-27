@@ -86,6 +86,7 @@ public class BakeryShopScene extends Scene{
 
         voidTex.render();
         mapBuilder.renderMap(this.map);
+        mapChecker.renderTeleports();
         baker.render();
         bbOrders.render();
         itemManager.renderItems(playerPos);

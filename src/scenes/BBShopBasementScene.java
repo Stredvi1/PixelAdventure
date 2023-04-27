@@ -67,6 +67,7 @@ public class BBShopBasementScene extends Scene{
 
         voidTex.render();
         mapBuilder.renderMap(map);
+        mapChecker.renderTeleports();
 
         if(!added) {;
             matrace.render();

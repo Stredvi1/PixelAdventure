@@ -1,5 +1,7 @@
 package map;
 
+import entity.Entity;
+import entity.PortPad;
 import render.Renderer;
 
 import java.util.ArrayList;
@@ -10,12 +12,16 @@ public class MapChecker {
     private ArrayList<Position> teleportPad;
     private ArrayList<Position> teleportTo;
 
+    private Entity portPad;
+
 
 
     public MapChecker(Map map) {
         this.map = map;
         teleportPad = new ArrayList<>();
         teleportTo = new ArrayList<>();
+
+        portPad = new PortPad();
     }
 
     public boolean checkMove(int x, int y) {
@@ -62,5 +68,12 @@ public class MapChecker {
             }
         }
         return null;
+    }
+
+    public void renderTeleports() {
+        for(Position port : teleportPad) {
+                portPad.setPosition(port);
+                portPad.render();
+        }
     }
 }

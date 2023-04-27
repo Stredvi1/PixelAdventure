@@ -73,6 +73,7 @@ public class SvartaScene extends Scene{
     public void render() {
         voidTex.render();
         mapBuilder.renderMap(this.map);
+        mapChecker.renderTeleports();
         garage.render();
         if(svartaPos.withinRadius(playerPos, 2) && Inventory.MATRACE > 0 && Renderer.questManager.hasQuest(4)) {
             Inventory.MATRACE = 0;

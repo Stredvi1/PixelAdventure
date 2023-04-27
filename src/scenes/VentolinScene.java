@@ -84,6 +84,7 @@ public class VentolinScene extends Scene{
     public void render() {
         voidTex.render();
         mapBuilder.renderMap(map);
+        mapChecker.renderTeleports();
         ventolin.render();
         bob.render();
         itemManager.renderItems(playerPos);

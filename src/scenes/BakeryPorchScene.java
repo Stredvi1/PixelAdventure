@@ -73,6 +73,8 @@ public class BakeryPorchScene extends Scene{
 
         voidTex.render();
         mapBuilder.renderMap(this.map);
+        mapChecker.renderTeleports();
+
         if(!bar.isBossDead) {
             snejks.render();
         }

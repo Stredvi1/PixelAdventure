@@ -58,6 +58,7 @@ public class BakeryScene extends Scene{
     public void render() {
         voidTex.render();
         mapBuilder.renderMap(map);
+        mapChecker.renderTeleports();
         bakery.render();
         bob.render();
         itemManager.renderItems(playerPos);

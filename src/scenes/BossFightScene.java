@@ -49,6 +49,7 @@ public class BossFightScene extends Scene{
     public void render() {
         voidTex.render();
         mapBuilder.renderMap(this.map);
+        mapChecker.renderTeleports();
         bob.render();
         bar.renderDamageBar(playerPos);
     }

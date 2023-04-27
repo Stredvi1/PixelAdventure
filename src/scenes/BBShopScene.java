@@ -84,6 +84,7 @@ public class BBShopScene extends Scene{
         }
         voidTex.render();
         mapBuilder.renderMap(this.map);
+        mapChecker.renderTeleports();
         bbMaestro.render();
         bbOrders.render();
         bob.render();

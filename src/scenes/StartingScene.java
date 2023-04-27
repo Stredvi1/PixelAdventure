@@ -67,6 +67,7 @@ public class StartingScene extends Scene {
         voidTex.render();
         mapBuilder.renderMap(this.map);
         bbShop.render();
+        mapChecker.renderTeleports();
 
         if(showItems) {
             if(start) {

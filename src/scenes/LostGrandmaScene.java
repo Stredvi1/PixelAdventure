@@ -69,6 +69,7 @@ public class LostGrandmaScene extends Scene{
     public void render() {
         voidTex.render();
         mapBuilder.renderMap(this.map);
+        mapChecker.renderTeleports();
 
         itemManager.renderItems(playerPos);
 
