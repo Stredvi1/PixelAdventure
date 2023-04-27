@@ -3,6 +3,7 @@ package scenes;
 import entity.Bob;
 import entity.Building;
 import items.Inventory;
+import items.Item;
 import lwjglutils.OGLTextRenderer;
 import map.MapBuilder;
 import map.Position;
@@ -35,19 +36,19 @@ public class BBShopBasementScene extends Scene{
                 {0,0,0,0,6,6,0,0,0,0,0,0,0,0,6,6},
                 {0,0,0,0,5,5,0,0,0,0,0,0,0,0,6,6},
                 {0,0,0,0,0,0,0,6,6,6,6,6,0,0,6,6},
-                {0,0,0,0,0,0,0,6,0,0,0,0,0,0,6,6},
-                {0,0,0,0,0,0,0,6,6,6,6,6,6,6,6,6},
+                {0,0,0,0,6,6,6,6,0,0,0,0,0,0,6,6},
+                {0,0,0,0,6,0,0,6,6,6,6,6,6,6,6,6},
                 {0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,6,6,6,6},
                 {6,6,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,6},
-                {6,6,6,6,6,6,6,6,6,6,0,0,0,0,0,0,0,0,6},
-                {0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,6},
-                {0,0,0,0,0,0,0,0,0,6,6,6,6,6,6,6,6,6,6}
+                {6,6,6,6,6,6,0,0,0,6,0,0,0,6,0,0,0,0,6},
+                {0,0,0,0,0,6,0,0,0,6,0,0,0,6,0,0,0,0,6},
+                {0,0,0,0,0,6,6,6,6,6,6,6,6,6,6,6,6,6,6}
         };
 
         super.init();
 
         playerPos = new Position(4,8);
-        voidTex = new VoidTex(playerPos, "textures/void.png");
+        voidTex = new VoidTex(playerPos, "textures/void.png", map.getHighestWidth(), map.getHeight());
         bob = new Bob(playerPos);
 
         matracePos = new Position(0,14);
@@ -55,7 +56,10 @@ public class BBShopBasementScene extends Scene{
 
         mapChecker.addTeleportPad(new Position(4,8),2);
         mapChecker.addTeleportPad(new Position(5,8),2);
-//TODO: přidat bagety
+
+        itemManager.addItem(new Item(Inventory.ItemType.ROLL, new Position(16,0)));
+        itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(11,9)));
+        itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(13,3)));
     }
 
     public void render() {
@@ -71,6 +75,7 @@ public class BBShopBasementScene extends Scene{
             added = true;
             Inventory.MATRACE = 1;
         }
+        itemManager.renderItems(playerPos);
 
         bob.render();
     }

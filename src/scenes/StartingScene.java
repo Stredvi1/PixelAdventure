@@ -49,14 +49,14 @@ public class StartingScene extends Scene {
         super.init();
         playerPos = new Position(1,1);
 
-        voidTex = new VoidTex(playerPos);
+        voidTex = new VoidTex(playerPos, map.getHighestWidth(), map.getHeight());
         bob = new Bob(playerPos);
 
         bbShop = new Building(new Position(12, 0),"bb_shop.png", 3, 0);
 
-        itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(5, 8)));
+        itemManager.addItem(new Item(Inventory.ItemType.ROLL, new Position(5, 8)));
         itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(12, 6)));
-        itemManager.addItem(new Item(Inventory.ItemType.BAGET,new Position(14, 8)));
+        itemManager.addItem(new Item(Inventory.ItemType.BAGET,new Position(16, 0)));
 
         mapChecker.addTeleportPad(new Position(0, 1), 9);
 

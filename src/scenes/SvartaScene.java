@@ -4,6 +4,7 @@ import entity.Bob;
 import entity.Building;
 import entity.NPC;
 import items.Inventory;
+import items.Item;
 import lwjglutils.OGLTextRenderer;
 import map.MapBuilder;
 import map.Position;
@@ -41,26 +42,30 @@ public class SvartaScene extends Scene{
                 {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
                 {0,0,0,2,2,2,2,2,2,2},
                 {0,0,0,0,0,2,2,2,2,2,2},
-                {0,0,0,0,0,2,2,2,2,2},
+                {0,0,0,0,2,2,2,2,2,2},
+                {7,1,1,1,2,2,2,2,2,2},
                 {7,7,7,1,1,2,2,2,2,3},
-                {1,7,7,7,1,1,2,2},
+                {7,7,7,7,1,1,2,2},
                 {1,1,1,2,2,2},
         };
 
         super.init();
         playerPos = new Position(0,2);
-        voidTex = new VoidTex(playerPos);
+        voidTex = new VoidTex(playerPos, map.getHighestWidth(), map.getHeight());
         bob = new Bob(playerPos);
 
         mapChecker.addTeleportPad(new Position(0, 2), 3, new Position(12,4));
         mapChecker.addTeleportPad(new Position(0, 3), 3, new Position(12,5));
 
-        mapChecker.addTeleportPad(new Position(0,11), 3, new Position(12,14));
+        mapChecker.addTeleportPad(new Position(0,12), 3, new Position(12,14));
 
         garage = new Building(new Position(16, 1), "garage.png", 3, 0);
         matrace = new Building(new Position(17, 2), "matrace.png", 2,0);
         svartaPos = new Position(17, 0);
         svarta = new NPC(svartaPos, "Svarta", "svarta.png");
+
+        itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(16,0)));
+
 
         initMessages();
     }
@@ -69,7 +74,7 @@ public class SvartaScene extends Scene{
         voidTex.render();
         mapBuilder.renderMap(this.map);
         garage.render();
-        if(svartaPos.withinRadius(playerPos, 1) && Inventory.MATRACE > 0 && Renderer.questManager.hasQuest(4)) {
+        if(svartaPos.withinRadius(playerPos, 2) && Inventory.MATRACE > 0 && Renderer.questManager.hasQuest(4)) {
             Inventory.MATRACE = 0;
             Renderer.questManager.finishQuest(4);
             renderMatrace = true;
@@ -89,6 +94,16 @@ public class SvartaScene extends Scene{
                 svarta.setPosition(svartaPos);
                 messageManager.addMessage(svarta.getName(), "Tak kámo, to byla vejška jako PRASE!", svartaPos);
                 messageManager.addBobMessage("Není ti nic?", svartaPos);
+                messageManager.addMessage(svarta.getName(), "Nic mi není, díky kámo!", svartaPos);
+                messageManager.addBobMessage("Jak ses tam nahoru vůbec dostal?", svartaPos);
+                messageManager.addMessage(svarta.getName(), "Svištěl tady nějakej vocas jak kdyby něco ukradl", svartaPos);
+                messageManager.addMessage(svarta.getName(), "A jel přímo na mě, tak jsem skočil na garáž", svartaPos);
+                messageManager.addBobMessage("Hustý kámo. A kam jel?", svartaPos);
+                messageManager.addMessage(svarta.getName(), "Pokračoval dál doprava", svartaPos);
+
+                itemManager.addItem(new Item(Inventory.ItemType.ROLL, new Position(8,9)));
+
+                mapChecker.addTeleportPad(new Position(24,3), 6);
             }
         }
 
@@ -97,6 +112,7 @@ public class SvartaScene extends Scene{
         }
         svarta.render();
         bob.render();
+        itemManager.renderItems(playerPos);
 
         messageManager.showMessage(playerPos);
 

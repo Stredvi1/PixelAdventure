@@ -13,10 +13,9 @@ public class App {
     //DONE: Inventář
     //DONE: Questy + quest show
     //TODO: Dodělat mapy, NPC, budovy
-    //TODO: VENTOLIN
+    //DONE: VENTOLIN
     //DONE: svarta
-    //TODO: underthewater
-    //TODO: kluk z autobusu
+    //TODO: kluk z autobusu + autobus inside
     //TODO: pečivo, chleba 4 rohliky
     //todo: snejks
 

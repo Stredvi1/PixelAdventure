@@ -30,7 +30,7 @@ public class Renderer extends AbstractRenderer {
     private MapBuilder mapBuilder;
 
     public static Scene ACTIVE;
-    private Scene starting, bbShop, lostGranny, svarta, basement, ventolin, bossFight;
+    private Scene starting, bbShop, lostGranny, svarta, basement, ventolin, bakery, bakeryStore, bakeryPorch, bossFight;
     private ArrayList<Scene> scenes;
 
     public Inventory inventory;
@@ -42,6 +42,7 @@ public class Renderer extends AbstractRenderer {
 
     protected Sound footstep;
 
+    public static int AllBagetCount = 0;
     public static final int normalCameraHeight = 50;
     private static int cameraHeight = normalCameraHeight;
 
@@ -85,9 +86,16 @@ public class Renderer extends AbstractRenderer {
                                 ACTIVE.hit();
                             }
                             break;
+                        case GLFW_KEY_M:
+                            if(ACTIVE.hasFight) {
+                                ACTIVE.heal();
+                            }
+                            break;
                         case GLFW_KEY_TAB:
                             questManager.toggle();
                             break;
+                        case GLFW_KEY_P:
+                            System.out.println(ACTIVE.getPlayerPos().toString());
                     }
                     footstep.play();
 
@@ -135,16 +143,22 @@ public class Renderer extends AbstractRenderer {
         svarta = new SvartaScene(mapBuilder, textRenderer);
         basement = new BBShopBasementScene(mapBuilder, textRenderer);
         ventolin = new VentolinScene(mapBuilder,textRenderer);
+        bakery = new BakeryScene(mapBuilder, textRenderer);
+        bakeryStore = new BakeryShopScene(mapBuilder, textRenderer);
+        bakeryPorch = new BakeryPorchScene(mapBuilder, textRenderer);
+
         bossFight = new BossFightScene(mapBuilder,textRenderer);
 
 
         scenes = new ArrayList<>();
-        scenes.addAll(Arrays.asList(starting, bbShop, lostGranny, svarta, basement, ventolin, bossFight));
+        scenes.addAll(Arrays.asList(starting, bbShop, lostGranny, svarta, basement, ventolin, bakery, bakeryStore, bakeryPorch, bossFight));
 
 
         ACTIVE = ventolin;
         ACTIVE.init();
         ACTIVE.playMusic();
+
+        Inventory.SHOW_INVENTORY = true;
 
 
         glEnable(GL_TEXTURE_2D);
@@ -197,9 +211,10 @@ public class Renderer extends AbstractRenderer {
         for(Scene scene : scenes) {
             if(scene.getSceneID() == teleportID) {
                 Position teleportTo = ACTIVE.getTeleportPos();
-
                 if(scene.hasOwnMusic) {
-                    ACTIVE.stopMusic();
+                    for (Scene s : scenes) {
+                        s.stopMusic();
+                    }
                 }
                 ACTIVE = scene;
                 if(!ACTIVE.isInit) {

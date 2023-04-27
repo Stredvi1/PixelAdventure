@@ -73,4 +73,15 @@ public class Map {
     public int getRowLength(int row) {
         return design[row].length;
     }
+
+    public int getHighestWidth() {
+        int width = 0;
+        for (int i = 0; i < getHeight(); i++) {
+            if(getRowLength(i) > width) {
+                width = getRowLength(i);
+            }
+        }
+        return width;
+    }
+
 }

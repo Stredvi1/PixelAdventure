@@ -33,7 +33,9 @@ public class MessageManager {
         init();
     }
 
-    private void init() {
+    public void init() {
+        isLastMessage = false;
+        currentIndex = 0;
         textRenderer.setBackgroundColor(bgColor);
         textRenderer.setColor(Color.white);
     }
@@ -115,6 +117,7 @@ public class MessageManager {
             glEnable(GL_TEXTURE_2D);
             glPopMatrix();
             textRenderer.addStr2D(Renderer.WIDTH / 20, (int) (Renderer.HEIGHT - Renderer.HEIGHT * 0.1), messages.get(currentIndex).toString());
+            textRenderer.addStr2D((int)(Renderer.WIDTH * 0.85f), (int) (Renderer.HEIGHT - Renderer.HEIGHT * 0.04), "ENTER ->");
         }
     }
 

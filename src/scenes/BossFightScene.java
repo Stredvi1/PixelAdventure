@@ -11,14 +11,13 @@ import map.VoidTex;
 
 public class BossFightScene extends Scene{
 
-    private final DamageBar bar;
 
     public BossFightScene(MapBuilder builder, OGLTextRenderer textRenderer) {
         super(builder, textRenderer);
         sceneID = 9;
         hasFight = true;
         hasOwnMusic = true;
-        bar = new DamageBar();
+        bar = new DamageBar(textRenderer);
     }
 
     public void init() {
@@ -38,7 +37,7 @@ public class BossFightScene extends Scene{
         super.init();
         playerPos = new Position(4, 5);
         bob = new Bob(playerPos);
-        voidTex = new VoidTex(playerPos, "textures/lava.png");
+        voidTex = new VoidTex(playerPos, "textures/lava.png", map.getHighestWidth(), map.getHeight());
         mapChecker.addTeleportPad(new Position(4, 5), 1);
 
     }
@@ -55,7 +54,5 @@ public class BossFightScene extends Scene{
     }
 
 
-    public void hit() {
-        bar.hit();
-    }
+
 }

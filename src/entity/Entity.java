@@ -1,6 +1,7 @@
 package entity;
 
 import lwjglutils.OGLTexture2D;
+import map.MapBuilder;
 import map.Position;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -8,7 +9,7 @@ import static org.lwjgl.opengl.GL11.*;
 public abstract class Entity {
 
     protected OGLTexture2D texture;
-    protected float size = 5;
+    protected float size = MapBuilder.MAP_SIZE;
     protected float scale = 0.6f;
     protected Position pos;
 

@@ -4,6 +4,7 @@ import gameStuff.Sound;
 import lwjglutils.OGLTexture2D;
 import map.MapBuilder;
 import map.Position;
+import render.Renderer;
 
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public class ItemManager {
             bread = new OGLTexture2D("textures/bread.png");
             goulash = new OGLTexture2D("textures/goulash.png");
             dumpling = new OGLTexture2D("textures/dumpling.png");
-            cake = new OGLTexture2D("textures/dumpling.png");
+            cake = new OGLTexture2D("textures/cake.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,6 +69,9 @@ public class ItemManager {
     }
 
     public void addItem(Item item) {
+        if(item.getType() == ItemType.BAGET) {
+            Renderer.AllBagetCount++;
+        }
         items.add(item);
     }
 

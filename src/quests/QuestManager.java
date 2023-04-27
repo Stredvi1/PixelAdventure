@@ -31,7 +31,7 @@ public class QuestManager {
     private int counter = 0;
     private int displayTime = 300;
 
-    private float letterSize = 15;
+    private float letterSize = Renderer.WIDTH * 0.012f;
 
     private Sound finished;
 
@@ -60,6 +60,7 @@ public class QuestManager {
         }
         if (questToRemove != null) {
             quests.remove(questToRemove);
+            System.out.println("FINISHED QUEST");
             finished.play();
         } else {
             assert false : "Quest s ID " + questID + " neexistuje";
@@ -155,7 +156,7 @@ public class QuestManager {
     public void resize(int width, int height) {
         this.halfWidth = width / 2;
         this.textY = (int) (height * 0.1);
-        letterSize = width * 0.01f;
+        letterSize = width * 0.012f;
         spacing = height / 10;
     }
 

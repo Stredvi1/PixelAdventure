@@ -36,10 +36,10 @@ public class LostGrandmaScene extends Scene{
                 {0,0,0,2,2,3,3,2},
                 {},
                 {},
-                {0,0,0,0,0,0,0,1,1,1,1,2,2},
-                {0,0,0,0,0,0,1,1,7,7,7,1,2},
+                {0,0,0,0,0,0,0,1,1,1,7,7,7},
+                {0,0,0,0,0,0,1,1,7,7,7,7,7},
                 {0,0,0,0,0,3,2,2,3,7,7,7,7},
-                {0,0,0,0,0,0,2,2,2,1,1,2,2},
+                {0,0,0,0,0,0,2,2,2,1,1,1,1},
                 {0,0,0,0,0,0,0,0,2,2,2},
 
 
@@ -48,7 +48,7 @@ public class LostGrandmaScene extends Scene{
         super.init();
         playerPos = new Position(2,0);
 
-        voidTex = new VoidTex(playerPos);
+        voidTex = new VoidTex(playerPos, map.getHighestWidth(), map.getHeight());
         bob = new Bob(playerPos);
 
         granny = new NPC(grannyPos, "Stařenka","granny.png");
@@ -79,7 +79,7 @@ public class LostGrandmaScene extends Scene{
             Renderer.questManager.addQuest(new Quest(granny.getName(), "Najdi mi moje brýle", 3));
             mapChecker.addTeleportPad(new Position(12,4), 4);
             mapChecker.addTeleportPad(new Position(12,5), 4);
-            mapChecker.addTeleportPad(new Position(12,14), 4,new Position(0,11));
+            mapChecker.addTeleportPad(new Position(12,14), 4,new Position(0,12));
         }
 
         if(playerPos.withinRadius(grannyPos, 1) && Inventory.GLASSES > 0) {

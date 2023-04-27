@@ -18,13 +18,14 @@ public class RandMapgenerator {
     public static void main(String[] args) {
         // Vytvoření dvourozměrného pole o rozměrech 20 x 20
 
-        int mapSize = 16;
-        int[][] mapDesign = new int[mapSize][mapSize];
+        int mapWidth = 18;
+        int mapHeight = 9;
+        int[][] mapDesign = new int[mapHeight][mapWidth];
 
         // Náhodné naplnění pole prvky z daného seznamu s určitou pravděpodobností
         Random rand = new Random();
-        for (int i = 0; i < mapSize; i++) {
-            for (int j = 0; j < mapSize; j++) {
+        for (int i = 0; i < mapHeight; i++) {
+            for (int j = 0; j < mapWidth; j++) {
                 int randNum = rand.nextInt(100);
                 if (randNum < 1) {
                     mapDesign[i][j] = WATER;
@@ -41,9 +42,9 @@ public class RandMapgenerator {
         }
 
         // Výpis pole na konzoli pro kontrolu
-        for (int i = 0; i < mapSize; i++) {
+        for (int i = 0; i < mapHeight; i++) {
             System.out.print("{");
-            for (int j = 0; j < mapSize; j++) {
+            for (int j = 0; j < mapWidth; j++) {
                 System.out.print(mapDesign[i][j] + ",");
             }
             System.out.print("},");

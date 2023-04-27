@@ -2,6 +2,7 @@ package scenes;
 
 import entity.Bob;
 import entity.Entity;
+import gameStuff.DamageBar;
 import items.Inventory;
 import gameStuff.Sound;
 import items.ItemManager;
@@ -25,6 +26,7 @@ public abstract class Scene {
     protected int sceneID = 0;
     protected MessageManager messageManager;
     public boolean hasFight = false;
+    protected DamageBar bar;
     protected Sound bgMusic;
     public boolean hasOwnMusic = false;
 
@@ -96,9 +98,6 @@ public abstract class Scene {
         messageManager.next(playerPos);
     }
 
-    public void hit(){
-
-    }
 
     public void stopMusic() {
         if(bgMusic != null) {
@@ -119,5 +118,17 @@ public abstract class Scene {
 
     public Position getTeleportPos() {
         return mapChecker.getTeleportTo(playerPos);
+    }
+
+    public void hit() {
+        if(hasFight) {
+            bar.hit();
+        }
+    }
+
+    public void heal() {
+        if(hasFight) {
+            bar.healBob();
+        }
     }
 }

@@ -15,8 +15,9 @@ public class Inventory {
 
    public static boolean SHOW_INVENTORY = false;
     private OGLTextRenderer textRenderer;
-
     private int startingPixel = (int) (Renderer.HEIGHT  *  0.1);
+    private float spacing = startingPixel * 0.6f;
+
 
     public Inventory(OGLTextRenderer textRenderer) {
     this.textRenderer = textRenderer;
@@ -28,38 +29,41 @@ public class Inventory {
             return;
         }
 
+        int move = (int)(startingPixel - spacing);
+
         if(BAGET != 0) {
-            textRenderer.addStr2D(startingPixel, startingPixel, "Bagety: " + BAGET);
+            textRenderer.addStr2D(startingPixel, move += spacing, "Bagety: " + BAGET + "/" + Renderer.AllBagetCount);
         }
         if(MAGIC_WAND != 0) {
-            textRenderer.addStr2D(startingPixel, (startingPixel *= 1.5), "Hůlka: " + MAGIC_WAND);
+            textRenderer.addStr2D(startingPixel, (move += spacing), "Hůlka: " + MAGIC_WAND);
         }
         if(GLASSES != 0) {
-            textRenderer.addStr2D(startingPixel, (startingPixel *= 1.5), "Brýle: " + GLASSES);
+            textRenderer.addStr2D(startingPixel, (move += spacing), "Brýle: " + GLASSES);
         }
         if(MATRACE != 0) {
-            textRenderer.addStr2D(startingPixel, (startingPixel *= 1.5), "Matrace: " + MATRACE);
+            textRenderer.addStr2D(startingPixel, (move += spacing), "Matrace: " + MATRACE);
         }
         if(ROLL != 0) {
-            textRenderer.addStr2D(startingPixel, (startingPixel *= 1.5), "Rohlíky: " + ROLL);
+            textRenderer.addStr2D(startingPixel, (move += spacing), "Rohlíky: " + ROLL);
         }
         if(BREAD != 0) {
-            textRenderer.addStr2D(startingPixel, (startingPixel *= 1.5), "Chleba: " + BREAD);
+            textRenderer.addStr2D(startingPixel, (move += spacing), "Chleba: " + BREAD);
         }
         if(GOULASH != 0) {
-            textRenderer.addStr2D(startingPixel, (startingPixel *= 1.5), "Guláš: " + GOULASH);
+            textRenderer.addStr2D(startingPixel, (move += spacing), "Guláš: " + GOULASH);
         }
         if(DUMPLING != 0) {
-            textRenderer.addStr2D(startingPixel, (startingPixel *= 1.5), "Knedlíky: " + DUMPLING);
+            textRenderer.addStr2D(startingPixel, (move += spacing), "Knedlíky: " + DUMPLING);
         }
         if(CAKE != 0) {
-            textRenderer.addStr2D(startingPixel, (startingPixel *= 1.5), "Bábovka: " + CAKE);
+            textRenderer.addStr2D(startingPixel, (move += spacing), "Bábovka: " + CAKE);
         }
 
     }
 
     public void resize() {
         startingPixel = (int) (Renderer.HEIGHT  *  0.1);
+        spacing = startingPixel * 0.6f;
     }
 
 }

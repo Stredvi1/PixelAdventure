@@ -49,7 +49,7 @@ public class BBShopScene extends Scene{
         maestroPos = new Position(4,0);
 
         bbMaestro = new NPC(maestroPos, "BB Maestro", "bb_maestro.png");
-        voidTex = new VoidTex(playerPos, "textures/void.png");
+        voidTex = new VoidTex(playerPos, "textures/void.png", map.getHighestWidth(), map.getHeight());
 
         bbOrders = new Building(new Position(3, 1), "bb_orders.png", 3, 2f);
 
