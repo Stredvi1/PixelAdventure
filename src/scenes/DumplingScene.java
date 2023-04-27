@@ -33,28 +33,26 @@ public class DumplingScene extends Scene{
         guySong = new Sound("audio/sounds/guySings.ogg", false);
 
         mapDesign = new int[][] {
-                {0,0,0,0,0,0,0,0,0,0,0,0,2,3,2,0,0,0,},
                 {0,0,0,0,0,0,0,0,0,0,0,3,2,3,2,2,0,0,},
-                {0,0,0,4,5,5,5,4,2,3,2,3,2,2,3,2,2,0,},
-                {0,2,2,4,5,5,5,4,3,2,3,2,3,3,2,2,2,0,},
-                {2,2,2,4,4,4,4,4,3,3,3,2,2,3,2,2,2,3,},
-                {7,2,2,2,3,2,3,2,2,3,2,2,2,2,2,2,2,3,},
-                {0,7,7,2,2,2,2,3,2,0,2,2,2,3,2,3,3,0,},
-                {0,0,7,7,7,7,7,7,0,0,0,2,2,2,3,2,0,0,},
-                {0,0,0,0,7,7,7,0,0,2,2,2,2,2,0,0,0,0,}
+                {0,0,0,4,4,4,4,4,4,3,2,2,2,2,2,2,2,0,},
+                {4,4,4,4,5,5,5,5,3,2,2,2,2,2,2,2,2,0,},
+                {5,5,5,5,5,5,5,5,3,3,2,3,2,3,2,1,3,3,1,},
+                {4,4,5,5,5,5,5,5,2,3,3,3,1,2,3,2,1,3,1,1},
+                {0,4,4,4,4,4,4,4,4,0,2,2,2,3,2,3,3,1,3,},
+                {0,0,0,0,2,3,0,0,0,0,0,2,2,2,2,2,0,0,},
 
         };
 
         super.init();
 
-        playerPos = new Position(13,0);
+        playerPos = new Position(0,3);
         voidTex = new VoidTex(playerPos, map.getHighestWidth(), map.getHeight());
         bob = new Bob(playerPos);
 
-        guyPos = new Position(5,5);
+        guyPos = new Position(5,3);
         guy = new NPC(guyPos, "Týpek", "pastryguy.png");
 
-        itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(16,6)));
+        itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(15,6)));
 
         mapChecker.addTeleportPad(new Position(5,2), 8);
         mapChecker.addTeleportPad(new Position(13,0), 6);
@@ -99,8 +97,9 @@ public class DumplingScene extends Scene{
             messageManager.addBobMessage("Tak tohle bylo fakt o ničem");
             messageManager.addBobMessage("Ještě že to nemusím programovat");
             messageManager.addBobMessage("Nebo...?");
+            messageManager.addBobMessage("No nic, jdu si pro recept.");
 
-
+            mapChecker.addTeleportPad(new Position(19,4),99);
         }
     }
 

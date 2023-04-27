@@ -159,7 +159,7 @@ public class Renderer extends AbstractRenderer {
         scenes.addAll(Arrays.asList(starting, bbShop, lostGranny, svarta, basement, ventolin, bakery, bakeryStore, bakeryPorch, dumpling, bossFight));
 
 
-        ACTIVE = starting;
+        ACTIVE = dumpling;
         ACTIVE.init();
         ACTIVE.playMusic();
 
