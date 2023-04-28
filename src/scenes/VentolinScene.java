@@ -25,6 +25,7 @@ public class VentolinScene extends Scene{
     private boolean addedPos = false;
     private Position telPos;
     private Sound ring;
+    private Sound bgMusic2;
 
 
     public VentolinScene(MapBuilder builder, OGLTextRenderer textRenderer) {
@@ -35,7 +36,7 @@ public class VentolinScene extends Scene{
 
     @Override
     public void init() {
-
+        bgMusic2 = new Sound("audio/music/discoscience.ogg", false);
         bgMusic = new Sound("audio/music/ventomech.ogg", true);
         ring = new Sound("audio/sounds/ring.ogg", false);
 
@@ -102,7 +103,7 @@ public class VentolinScene extends Scene{
         if (playerPos.withinRadius(ventolinPos, 1) && Inventory.CAKE == 1) {
             messageManager.addMessage(ventolin.getName(), "Tak tohle byla ta nejlepší bábovka co jsem kdy měl!", ventolinPos);
             messageManager.addMessage(ventolin.getName(), "Tahle písnička je pro tebe!", ventolinPos);
-            messageManager.addMessage(ventolin.getName(), "BTW dodávka jela dál doleva :)", ventolinPos);
+            messageManager.addMessage(ventolin.getName(), "BTW dodávka jela dál doprava :)", ventolinPos);
 
             Inventory.CAKE = 0;
             Renderer.questManager.finishQuest(5);
@@ -112,18 +113,16 @@ public class VentolinScene extends Scene{
         if (messageManager.isLastMessage() && isDiscoScience && !initDisco) {
             initDisco = true;
             bgMusic.stop();
-            Sound bgMusic2 = new Sound("audio/music/discoscience.ogg", false);
             tmp = bgMusic;
             bgMusic = bgMusic2;
             bgMusic.play();
         }
 
-        if (isDiscoScience && !bgMusic.isPlaying()) {
+        if (isDiscoScience && !bgMusic.isPlaying() && !Renderer.FINAL_MUSIC) {
             isDiscoScience = false;
             bgMusic.delete();
             bgMusic = tmp;
             bgMusic.play();
-
         }
 
         if(playerPos.equals(telPos) && initDisco && !momCalled) {

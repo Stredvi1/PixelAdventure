@@ -8,6 +8,7 @@ import org.lwjgl.glfw.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.DoubleBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -47,7 +48,10 @@ public abstract class AbstractRenderer {
 
         try {
             //create the font to use. Specify the size!
-            customFont = Font.createFont(Font.TRUETYPE_FONT, new File("assets/font/VT323.ttf")).deriveFont(25f);
+            InputStream is = this.getClass().getResourceAsStream("/font/VT323.ttf");
+            assert is != null;
+            customFont = Font.createFont(Font.TRUETYPE_FONT,is).deriveFont(25f);
+//            customFont = Font.createFont(Font.TRUETYPE_FONT, new File("assets/font/VT323.ttf")).deriveFont(25f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             //register the font
             ge.registerFont(customFont);

@@ -1,11 +1,17 @@
 package entity;
 
+import map.Position;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class PortPad extends Entity{
 
-
     public PortPad() {
+        init("portPad.png");
+    }
+
+    public PortPad(Position pos) {
+        this.pos = new Position(pos.getX(), pos.getY());
         init("portPad.png");
     }
 
@@ -36,5 +42,10 @@ public class PortPad extends Entity{
 
         glEnd();
         glPopMatrix();
+    }
+
+    @Override
+    public void setPosition(Position pos) {
+        this.pos = new Position(pos.getX(), pos.getY());
     }
 }

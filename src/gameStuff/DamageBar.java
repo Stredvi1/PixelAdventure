@@ -41,10 +41,12 @@ public class DamageBar {
     private boolean right = true;
 
     private Random rnd = new Random();
+    private int maxBossDamage = 5;
 
     public boolean isBobDead = false;
     public boolean isBossDead = false;
 
+    private int bagetCount = 0;
     private final Sound hitSound;
 
     private OGLTextRenderer textRenderer;
@@ -52,9 +54,11 @@ public class DamageBar {
     public DamageBar(OGLTextRenderer textRenderer) {
         this.textRenderer = textRenderer;
         hitSound = new Sound("audio/sounds/hit.ogg", false, true);
+        bagetCount = Inventory.BAGET;
     }
 
     public void init() {
+        Inventory.BAGET = bagetCount;
         isBobDead = false;
         isBossDead = false;
         bobHealth = 100;
@@ -212,7 +216,7 @@ public class DamageBar {
     public boolean hit() {
         bossHit();
         hitSound.play();
-        if (cursorPos >= -middleWidth * 2.5f && cursorPos <= middleWidth * 2.5f) {
+        if (cursorPos >= -middleWidth * 3.5f && cursorPos <= middleWidth * 3.5f) {
             if (bossHealth > 0) {
                 bossHealth -= 10;
                 hit = true;
@@ -228,7 +232,7 @@ public class DamageBar {
     private void bossHit() {
 
         if (bobHealth > 0) {
-            int hit = (5 + rnd.nextInt(5));
+            int hit = (maxBossDamage + rnd.nextInt(maxBossDamage));
             int healthAfterHit = bobHealth - hit;
             if(healthAfterHit < 0) {
                 bobHealth = 0;
@@ -248,5 +252,13 @@ public class DamageBar {
                 bobHealth += 20;
             }
         }
+    }
+
+    public void setCursorSpeed(float speed) {
+        this.cursorSpeed = speed;
+    }
+
+    public void setMaxBossDamage(int damage) {
+        maxBossDamage = damage / 2;
     }
 }

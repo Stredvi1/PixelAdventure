@@ -52,7 +52,7 @@ public class Map {
     }
 
     public void setParcel(int i, int j, int type) {
-        this.design[i][j] = 0;
+        this.design[i][j] = type;
     }
 
     public int[][] getDesign() {

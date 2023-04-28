@@ -5,11 +5,12 @@ import render.Renderer;
 
 public class Inventory {
 
-   public enum ItemType {
-       BAGET, GLASSES, MAGIC_WAND, ROLL, BREAD, GOULASH, DUMPLING, CAKE
+
+    public enum ItemType {
+       BAGET, GLASSES, MAGIC_WAND, ROLL, BREAD, GOULASH, DUMPLING, RECIPE, CAKE, BBEPIC
    }
 
-    public static int BAGET, MAGIC_WAND, GLASSES, MATRACE, ROLL, BREAD, GOULASH, DUMPLING, CAKE;
+    public static int BAGET, MAGIC_WAND, GLASSES, MATRACE, ROLL, BREAD, GOULASH, DUMPLING, CAKE, RECIPE, BBEPIC;
 
 
 
@@ -31,6 +32,12 @@ public class Inventory {
 
         int move = (int)(startingPixel - spacing);
 
+        if(BBEPIC != 0) {
+            textRenderer.addStr2D(startingPixel, (move += spacing), "EPICKÁ BAGETA: " + BBEPIC);
+        }
+        if(RECIPE != 0) {
+            textRenderer.addStr2D(startingPixel, (move += spacing), "Recept: " + RECIPE);
+        }
         if(BAGET != 0) {
             textRenderer.addStr2D(startingPixel, move += spacing, "Bagety: " + BAGET + "/" + Renderer.AllBagetCount);
         }
@@ -58,6 +65,8 @@ public class Inventory {
         if(CAKE != 0) {
             textRenderer.addStr2D(startingPixel, (move += spacing), "Bábovka: " + CAKE);
         }
+
+
 
     }
 

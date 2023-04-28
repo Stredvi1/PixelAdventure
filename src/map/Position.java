@@ -14,6 +14,12 @@ public class Position {
 
     }
 
+    public Position(Position pos) {
+        this.parcelPos[0] = pos.getX();
+        this.parcelPos[1] = pos.getY();
+
+    }
+
     public Position(int parcelX, int parcelY) {
 
         this.parcelPos[0] = parcelX;
@@ -22,7 +28,8 @@ public class Position {
 
     public Position(Position pos, int mapID) {
         this.id = mapID;
-        this.parcelPos = pos.toParcel();
+        this.parcelPos[1] = pos.getY();
+        this.parcelPos[0] = pos.getX();
     }
 
     public float[] toMap() {

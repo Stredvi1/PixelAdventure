@@ -19,7 +19,7 @@ public class ItemManager {
     private ArrayList<Item> items;
     private Sound pickup;
 
-    private OGLTexture2D baget, glasses, magic_wand, roll, bread, goulash, dumpling, cake;
+    private OGLTexture2D baget, glasses, magic_wand, roll, bread, goulash, dumpling, cake, recipe, bbepic;
 
     public ItemManager() {
         init();
@@ -36,6 +36,8 @@ public class ItemManager {
             goulash = new OGLTexture2D("textures/goulash.png");
             dumpling = new OGLTexture2D("textures/dumpling.png");
             cake = new OGLTexture2D("textures/cake.png");
+            recipe = new OGLTexture2D("textures/recipe.png");
+            bbepic = new OGLTexture2D("textures/bbepic.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,6 +58,8 @@ public class ItemManager {
                     case GOULASH -> GOULASH++;
                     case DUMPLING -> DUMPLING++;
                     case CAKE -> CAKE++;
+                    case RECIPE -> RECIPE++;
+                    case BBEPIC -> BBEPIC++;
                 }
                 itemToRemove = item;
                 pickup.play();
@@ -88,6 +92,8 @@ public class ItemManager {
             case GOULASH -> goulash.bind();
             case DUMPLING -> dumpling.bind();
             case CAKE -> cake.bind();
+            case RECIPE -> recipe.bind();
+            case BBEPIC -> bbepic.bind();
         }
 
         glMatrixMode(GL_MODELVIEW);

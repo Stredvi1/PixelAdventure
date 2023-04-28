@@ -22,6 +22,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer extends AbstractRenderer {
 
+    public static boolean FINAL_MUSIC = false;
     public static int WIDTH = Window.WIDTH;
     public static int HEIGHT = Window.HEIGHT;
 
@@ -30,7 +31,18 @@ public class Renderer extends AbstractRenderer {
     private MapBuilder mapBuilder;
 
     public static Scene ACTIVE;
-    private Scene starting, bbShop, lostGranny, svarta, basement, ventolin, bakery, bakeryStore, bakeryPorch, dumpling, bossFight;
+    private Scene starting,
+            bbShop,
+            lostGranny,
+            svarta,
+            basement,
+            ventolin,
+            bakery,
+            bakeryStore,
+            bakeryPorch,
+            dumpling,
+            road,
+            bossFight;
     private static ArrayList<Scene> scenes;
 
     public Inventory inventory;
@@ -98,6 +110,7 @@ public class Renderer extends AbstractRenderer {
                             break;
                         case GLFW_KEY_P:
                             System.out.println(ACTIVE.getPlayerPos().toString());
+                            break;
                     }
                     footstep.play();
 
@@ -151,19 +164,31 @@ public class Renderer extends AbstractRenderer {
         bakeryStore = new BakeryShopScene(mapBuilder, textRenderer);
         bakeryPorch = new BakeryPorchScene(mapBuilder, textRenderer);
         dumpling = new DumplingScene(mapBuilder, textRenderer);
+        road = new InfinityRoadScene(mapBuilder, textRenderer);
+
 
         bossFight = new BossFightScene(mapBuilder, textRenderer);
 
 
         scenes = new ArrayList<>();
-        scenes.addAll(Arrays.asList(starting, bbShop, lostGranny, svarta, basement, ventolin, bakery, bakeryStore, bakeryPorch, dumpling, bossFight));
+        scenes.addAll(Arrays.asList(starting,
+                bbShop,
+                lostGranny,
+                svarta,
+                basement,
+                ventolin,
+                bakery,
+                bakeryStore,
+                bakeryPorch,
+                dumpling,
+                road,
+                bossFight));
 
 
         ACTIVE = starting;
         ACTIVE.init();
         ACTIVE.playMusic();
 
-        Inventory.SHOW_INVENTORY = true;
 
 
         glEnable(GL_TEXTURE_2D);
@@ -180,6 +205,8 @@ public class Renderer extends AbstractRenderer {
 
     @Override
     public void display() {
+
+
         glViewport(0, 0, width, height);
 
         clearBuffers();
@@ -215,7 +242,7 @@ public class Renderer extends AbstractRenderer {
         for (Scene scene : scenes) {
             if (scene.getSceneID() == teleportID) {
                 Position teleportTo = ACTIVE.getTeleportPos();
-                if (scene.hasOwnMusic) {
+                if (scene.hasOwnMusic && !FINAL_MUSIC) {
                     for (Scene s : scenes) {
                         s.stopMusic();
                     }
@@ -224,7 +251,9 @@ public class Renderer extends AbstractRenderer {
                 if (!ACTIVE.isInit) {
                     ACTIVE.init();
                 }
-                ACTIVE.playMusic();
+                if(!FINAL_MUSIC) {
+                    ACTIVE.playMusic();
+                }
                 setCameraHeight(normalCameraHeight);
 
                 if (teleportTo != null) {

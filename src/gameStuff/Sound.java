@@ -1,7 +1,6 @@
 package gameStuff;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
@@ -24,61 +23,55 @@ public class Sound {
     }
 
     public Sound(String filepath, boolean loops, boolean playMultiple) {
-        this.filepath = filepath;
+        //TODO: při exportu smáznout asset
+        this.filepath = "assets/" + filepath;
         this.playMultiple = playMultiple;
 
-        System.out.println("Načítám zvuk " + filepath);
 
-        URL url = Thread.currentThread().getContextClassLoader().getResource(filepath);
-        if (url == null) {
-            System.out.println("Classpath resource not found: " + filepath);
-        } else {
-            File file = new File(url.getFile());
+        // Allocate space to store the return information from stb
+        stackPush();
+        IntBuffer channelsBuffer = stackMallocInt(1);
+        stackPush();
+        IntBuffer sampleRateBuffer = stackMallocInt(1);
 
-            // Allocate space to store the return information from stb
-            stackPush();
-            IntBuffer channelsBuffer = stackMallocInt(1);
-            stackPush();
-            IntBuffer sampleRateBuffer = stackMallocInt(1);
-
-            ShortBuffer rawAudioBuffer =
-                    stb_vorbis_decode_filename(file.getPath(), channelsBuffer, sampleRateBuffer);
-            if (rawAudioBuffer == null) {
-                System.out.println("Could not load sound '" + file.getPath() + "'");
-                stackPop();
-                stackPop();
-                return;
-            }
-
-            // Retrieve the extra information that was stored in the buffers by stb
-            int channels = channelsBuffer.get();
-            int sampleRate = sampleRateBuffer.get();
-            // Free
+        ShortBuffer rawAudioBuffer =
+                stb_vorbis_decode_filename(this.filepath, channelsBuffer, sampleRateBuffer);
+        if (rawAudioBuffer == null) {
+            System.out.println("Could not load sound '" + this.filepath + "'");
             stackPop();
             stackPop();
-
-            // Find the correct openAL format
-            int format = -1;
-            if (channels == 1) {
-                format = AL_FORMAT_MONO16;
-            } else if (channels == 2) {
-                format = AL_FORMAT_STEREO16;
-            }
-
-            bufferId = alGenBuffers();
-            alBufferData(bufferId, format, rawAudioBuffer, sampleRate);
-
-            // Generate the source
-            sourceId = alGenSources();
-
-            alSourcei(sourceId, AL_BUFFER, bufferId);
-            alSourcei(sourceId, AL_LOOPING, loops ? 1 : 0);
-            alSourcei(sourceId, AL_POSITION, 0);
-            alSourcef(sourceId, AL_GAIN, 0.3f);
-
-            // Free stb raw audio buffer
-            free(rawAudioBuffer);
+            return;
         }
+
+        // Retrieve the extra information that was stored in the buffers by stb
+        int channels = channelsBuffer.get();
+        int sampleRate = sampleRateBuffer.get();
+        // Free
+        stackPop();
+        stackPop();
+
+        // Find the correct openAL format
+        int format = -1;
+        if (channels == 1) {
+            format = AL_FORMAT_MONO16;
+        } else if (channels == 2) {
+            format = AL_FORMAT_STEREO16;
+        }
+
+        bufferId = alGenBuffers();
+        alBufferData(bufferId, format, rawAudioBuffer, sampleRate);
+
+        // Generate the source
+        sourceId = alGenSources();
+
+        alSourcei(sourceId, AL_BUFFER, bufferId);
+        alSourcei(sourceId, AL_LOOPING, loops ? 1 : 0);
+        alSourcei(sourceId, AL_POSITION, 0);
+        alSourcef(sourceId, AL_GAIN, 0.3f);
+
+        // Free stb raw audio buffer
+        free(rawAudioBuffer);
+
     }
 
     public void delete() {

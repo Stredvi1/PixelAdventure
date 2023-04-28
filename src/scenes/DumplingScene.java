@@ -21,6 +21,7 @@ public class DumplingScene extends Scene{
 
     private boolean added = false;
     private boolean isQuestDone = false;
+    private boolean addedBossQuestion = false;
 
     public DumplingScene(MapBuilder builder, OGLTextRenderer textRenderer) {
         super(builder, textRenderer);
@@ -33,13 +34,15 @@ public class DumplingScene extends Scene{
         guySong = new Sound("audio/sounds/guySings.ogg", false);
 
         mapDesign = new int[][] {
-                {0,0,0,0,0,0,0,0,0,0,0,3,2,3,2,2,0,0,},
-                {0,0,0,4,4,4,4,4,4,3,2,2,2,2,2,2,2,0,},
-                {4,4,4,4,5,5,5,5,3,2,2,2,2,2,2,2,2,0,},
-                {5,5,5,5,5,5,5,5,3,3,2,3,2,3,2,1,3,3,1,},
-                {4,4,5,5,5,5,5,5,2,3,3,3,1,2,3,2,1,3,1,1},
-                {0,4,4,4,4,4,4,4,4,0,2,2,2,3,2,3,3,1,3,},
-                {0,0,0,0,2,3,0,0,0,0,0,2,2,2,2,2,0,0,},
+                {0,0,0,0,0,0,0,0,0,0,0,3,2,0,0,0,0,0,},
+                {0,0,0,4,4,4,4,4,4,3,2,2,0,0,0,0,0,0,},
+                {4,4,4,4,5,5,5,5,3,2,5,2,2,2,2,2,4,4,4,4},
+                {5,5,5,5,5,5,5,5,5,3,2,3,2,4,2,1,3,5,5,5,},
+                {4,4,5,5,5,5,5,5,2,3,3,5,1,2,3,5,1,5,5,5,5},
+                {0,4,4,4,4,4,4,4,4,5,4,2,4,3,2,4,4,4,4,4,},
+                {0,0,0,0,0,0,0,0,0,0,0,6,9,9,9,6,0,0,},
+                {0,0,0,0,0,0,0,0,0,0,0,6,9,9,9,6,0,0,},
+                {0,0,0,0,0,0,0,0,0,0,0,6,6,6,6,6,0,0,},
 
         };
 
@@ -48,14 +51,11 @@ public class DumplingScene extends Scene{
         playerPos = new Position(0,3);
         voidTex = new VoidTex(playerPos, map.getHighestWidth(), map.getHeight());
         bob = new Bob(playerPos);
-
         guyPos = new Position(5,3);
         guy = new NPC(guyPos, "Týpek", "pastryguy.png");
 
-        itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(15,6)));
 
-        mapChecker.addTeleportPad(new Position(5,2), 8);
-        mapChecker.addTeleportPad(new Position(13,0), 6);
+        mapChecker.addTeleportPad(new Position(0,3), 6);
 
         initMessages();
     }
@@ -84,13 +84,20 @@ public class DumplingScene extends Scene{
                 && Inventory.ROLL >= 4) {
             isQuestDone = true;
             Renderer.questManager.finishQuest(7);
-            Inventory.BREAD -= 1;
-            Inventory.DUMPLING -= 4;
-            Inventory.GOULASH -= 1;
-            Inventory.ROLL -= 4;
+            Inventory.BREAD = 0;
+            Inventory.DUMPLING = 0;
+            Inventory.GOULASH = 0;
+            Inventory.ROLL = 0;
 
             Renderer.stopAllMusic();
             guySong.play();
+
+            itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(14,7)));
+            itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(14,6)));
+            itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(13,6)));
+            itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(13,7)));
+            itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(12,6)));
+            itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(12,7)));
         }
 
         if(isQuestDone && !guySong.isPlaying()) {
@@ -100,7 +107,16 @@ public class DumplingScene extends Scene{
             messageManager.addBobMessage("Nebo...?");
             messageManager.addBobMessage("No nic, jdu si pro recept.");
 
-            mapChecker.addTeleportPad(new Position(19,4),99);
+        }
+
+        if (isQuestDone && !addedBossQuestion && !guySong.isPlaying()) {
+            addedBossQuestion = true;
+            messageManager.addBobMessage("Ehh.. tohle vypadá na težkej fight.");
+            messageManager.addBobMessage("Asi by nebylo od věci si nabrat zásoby.");
+
+            mapChecker.addTeleportPad(new Position(20,4),11);
+            mapChecker.addTeleportPad(new Position(19,3),11);
+
         }
     }
 

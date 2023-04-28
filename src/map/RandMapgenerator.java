@@ -18,8 +18,8 @@ public class RandMapgenerator {
     public static void main(String[] args) {
         // Vytvoření dvourozměrného pole o rozměrech 20 x 20
 
-        int mapWidth = 18;
-        int mapHeight = 9;
+        int mapWidth = 10;
+        int mapHeight = 10;
         int[][] mapDesign = new int[mapHeight][mapWidth];
 
         // Náhodné naplnění pole prvky z daného seznamu s určitou pravděpodobností
@@ -28,15 +28,15 @@ public class RandMapgenerator {
             for (int j = 0; j < mapWidth; j++) {
                 int randNum = rand.nextInt(100);
                 if (randNum < 1) {
-                    mapDesign[i][j] = WATER;
-                } else if (randNum < 8) {
-                    mapDesign[i][j] = SAND;
-                } else if (randNum < 80) {
-                    mapDesign[i][j] = GRASS;
-                } else if (randNum < 82) {
                     mapDesign[i][j] = DIRT;
+                } else if (randNum < 8) {
+                    mapDesign[i][j] = DIRT;
+                } else if (randNum < 50) {
+                    mapDesign[i][j] = VOID;
+                } else if (randNum < 90) {
+                    mapDesign[i][j] = ASPHALT;
                 } else {
-                    mapDesign[i][j] = STONE;
+                    mapDesign[i][j] = VOID;
                 }
             }
         }

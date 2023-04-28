@@ -4,6 +4,8 @@ import entity.Building;
 import entity.Bob;
 import entity.NPC;
 import gameStuff.Sound;
+import items.Inventory;
+import items.Item;
 import lwjglutils.OGLTextRenderer;
 import map.*;
 import quests.Quest;
@@ -18,6 +20,7 @@ public class BBShopScene extends Scene{
 
     private boolean added = false;
     private boolean addedMatrace = false;
+    private boolean bruselBaget = false;
 
     public BBShopScene(MapBuilder builder, OGLTextRenderer textRenderer) {
         super(builder, textRenderer);
@@ -89,6 +92,7 @@ public class BBShopScene extends Scene{
         bbOrders.render();
         bob.render();
 
+        itemManager.renderItems(playerPos);
         messageManager.showMessage(playerPos);
 
 
@@ -110,6 +114,26 @@ public class BBShopScene extends Scene{
             mapChecker.addTeleportPad(new Position(4, 5), 1);
             Renderer.questManager.addQuest(new Quest("BB Maestro", "Získej zpět tajný recept", 2));
         }
+
+        if(playerPos.withinRadius(maestroPos, 1) && Renderer.questManager.hasQuest(2) && Inventory.RECIPE == 1) {
+            bruselBaget = true;
+            Inventory.RECIPE = 0;
+            Renderer.questManager.finishQuest(2);
+            messageManager.addMessage(bbMaestro.getName(), "Ooo můj bože cožeee?!", maestroPos);
+            messageManager.addMessage(bbMaestro.getName(), "TY jsi to OPRAVDU dokázal! :O", maestroPos);
+            messageManager.addMessage(bbMaestro.getName(), "Moc ti děkuji, díky tobě může Bageterka pokračovat dál :).", maestroPos);
+            messageManager.addBobMessage("A kde je moje bruselská v meníčku?", maestroPos);
+            messageManager.addMessage(bbMaestro.getName(), "Už se to nese :)", maestroPos);
+            messageManager.addBobMessage("No proto...", maestroPos);
+
+        }
+
+        if(bruselBaget && messageManager.isLastMessage()) {
+            bruselBaget = false;
+            itemManager.addItem(new Item(Inventory.ItemType.BBEPIC, new Position(5,1)));
+        }
+
+
     }
 
 

@@ -20,6 +20,7 @@ import java.awt.image.DataBufferByte;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -119,8 +120,9 @@ public class Window {
 
         // Load window icon
         try {
-            URL url = Thread.currentThread().getContextClassLoader().getResource("textures/bob.png");
-            BufferedImage bi = ImageIO.read(new java.io.File(url.getFile()));
+            InputStream is = this.getClass().getResourceAsStream("/textures/bob.png");
+            assert is != null;
+            BufferedImage bi = ImageIO.read(is);
             byte[] iconData = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
             ByteBuffer ib = createByteBuffer(iconData.length);
             ib.put(iconData);

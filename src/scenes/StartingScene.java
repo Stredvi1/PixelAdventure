@@ -16,6 +16,7 @@ public class StartingScene extends Scene {
     public static boolean showItems = false;
     private boolean added = false;
     private boolean start = true;
+    private boolean svarta = true;
 
     public StartingScene(MapBuilder builder, OGLTextRenderer textRenderer) {
         super(builder, textRenderer);
@@ -58,8 +59,6 @@ public class StartingScene extends Scene {
         itemManager.addItem(new Item(Inventory.ItemType.BAGET, new Position(12, 6)));
         itemManager.addItem(new Item(Inventory.ItemType.BAGET,new Position(16, 0)));
 
-        mapChecker.addTeleportPad(new Position(0, 1), 9);
-
         initMessages();
     }
 
@@ -92,10 +91,15 @@ public class StartingScene extends Scene {
             mapChecker.addTeleportPad(new Position(13, 0), 2);
         }
 
+        if(Renderer.questManager.hasQuest(4) && !svarta) {
+            svarta = true;
+            messageManager.addBobMessage("Hmm.. třeba budou mít něco na skladě v bageterce...");
+        }
+
     }
 
     private void initMessages() {
-        messageManager.addBobMessage("Hmm, mám chuť na bagetu...");
+        messageManager.addBobMessage("Hmm, mám chuť na pořádnou bruselskou bagetu...");
         messageManager.addBobMessage("Ještě že je kousek odsud Bageterka.");
 
     }
