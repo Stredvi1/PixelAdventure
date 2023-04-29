@@ -109,7 +109,7 @@ public class DumplingScene extends Scene{
 
         }
 
-        if (isQuestDone && !addedBossQuestion && !guySong.isPlaying()) {
+        if (!isQuestDone && !addedBossQuestion && playerPos.withinRadius(new Position(13,4),3)) {
             addedBossQuestion = true;
             messageManager.addBobMessage("Ehh.. tohle vypadá na težkej fight.");
             messageManager.addBobMessage("Asi by nebylo od věci si nabrat zásoby.");

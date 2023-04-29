@@ -46,19 +46,23 @@ public class DamageBar {
     public boolean isBobDead = false;
     public boolean isBossDead = false;
 
-    private int bagetCount = 0;
+    private int bagetCount;
     private final Sound hitSound;
+
+    private int usedBagets = 0;
+
 
     private OGLTextRenderer textRenderer;
 
     public DamageBar(OGLTextRenderer textRenderer) {
         this.textRenderer = textRenderer;
         hitSound = new Sound("audio/sounds/hit.ogg", false, true);
-        bagetCount = Inventory.BAGET;
+//        bagetCount = Inventory.BAGET;
     }
 
     public void init() {
-        Inventory.BAGET = bagetCount;
+        System.out.println(Inventory.BAGET);
+        usedBagets = 0;
         isBobDead = false;
         isBossDead = false;
         bobHealth = 100;
@@ -234,7 +238,7 @@ public class DamageBar {
         if (bobHealth > 0) {
             int hit = (maxBossDamage + rnd.nextInt(maxBossDamage));
             int healthAfterHit = bobHealth - hit;
-            if(healthAfterHit < 0) {
+            if(healthAfterHit <= 0) {
                 bobHealth = 0;
                 isBobDead = true;
             } else {
@@ -246,6 +250,7 @@ public class DamageBar {
     public void healBob() {
         if(Inventory.BAGET > 0 && bobHealth < 100) {
             Inventory.BAGET--;
+            usedBagets++;
             if(bobHealth + 20 > 100) {
                 bobHealth = 100;
             } else {
