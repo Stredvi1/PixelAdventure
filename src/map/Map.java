@@ -15,29 +15,13 @@ public class Map {
     public static final int WOOD = 8;
     public static final int DISCO = 9;
 
-
-
-
-
-
     private int[][] design = {
-            {0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
-            {0, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3},
-            {1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2},
-            {2, 2, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4},
-            {2, 2, 3, 4, 2, 2, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4},
-            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 0, 0, 4, 4, 4, 4},
-            {0, 0, 1, 4, 2, 2, 4, 4, 4, 0, 0, 0, 4, 4, 4, 4},
-            {0, 0, 1, 4, 2, 2, 4, 4, 4, 0, 0, 4, 4, 4, 4, 4},
-            {0, 0, 1, 4, 2, 2, 0, 4, 4, 4, 0, 0, 4, 4, 4, 4},
-            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 0, 0, 4, 4, 4, 4},
-            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 4, 0, 0, 4, 4, 4},
-            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 4, 0, 0, 0, 4, 4},
-            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 0, 0, 0, 0, 4, 4},
-            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 4, 4, 0, 0, 4, 4},
-            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4},
-            {0, 0, 1, 4, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4},
-
+            {0, 0, 0, 1, 1, 1, 2},
+            {0, 1, 1, 2, 2, 2, 3},
+            {1, 2, 2, 3, 3, 3, 3},
+            {2, 2, 3, 3, 4, 4, 4},
+            {2, 2, 3, 4, 2, 2, 4},
+            {0, 0, 1, 4, 2, 2, 4},
     };
 
     public Map(int[][] design) {
@@ -45,6 +29,13 @@ public class Map {
     }
 
     public Map() {
+    }
+
+    public int getParcel(int row, int index) {
+        if (row < this.getHeight() && index < this.getRowLength(row)) {
+            return design[row][index];
+        }
+        return VOID;
     }
 
     public void setDesign(int[][] design) {
@@ -57,13 +48,6 @@ public class Map {
 
     public int[][] getDesign() {
         return this.design;
-    }
-
-    public int getParcel(int row, int index) {
-        if (row < this.getHeight() && index < this.getRowLength(row)) {
-            return design[row][index];
-        }
-        return VOID;
     }
 
     public int getHeight() {

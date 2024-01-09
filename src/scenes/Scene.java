@@ -10,11 +10,9 @@ import lwjglutils.OGLTextRenderer;
 import map.*;
 import messages.MessageManager;
 
-import java.util.ArrayList;
 
 public abstract class Scene {
 
-    protected ArrayList<Entity> entityList;
     protected Inventory items;
     protected Bob bob;
     protected Map map;

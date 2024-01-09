@@ -23,7 +23,6 @@ public abstract class Entity {
         }
     }
 
-
     public void render() {
 
         texture.bind();
